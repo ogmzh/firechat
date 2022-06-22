@@ -1,24 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { getApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import Chatroom from './features/Chatroom/Chatroom';
+import SignIn from './features/Signin/SignIn';
 
 function App() {
+  const app = getApp('firechat');
+  const auth = getAuth(app);
+  const [user] = useAuthState(auth);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <header>lmaochat</header>
+      <SignIn />
+      {user && <Chatroom />}
     </div>
   );
 }

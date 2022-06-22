@@ -1,12 +1,23 @@
+import { initializeApp } from 'firebase/app';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+initializeApp(
+  {
+    apiKey: 'AIzaSyDwb7IP9BekGFq3A23aRQq6lFrHorPkrcc',
+    authDomain: 'firechat-27e8e.firebaseapp.com',
+    projectId: 'firechat-27e8e',
+    storageBucket: 'firechat-27e8e.appspot.com',
+    messagingSenderId: '1040635482321',
+    appId: '1:1040635482321:web:282ca93617f44a5b1735f0',
+    measurementId: 'G-XLJCPR3J2X',
+  },
+  'firechat'
 );
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <App />

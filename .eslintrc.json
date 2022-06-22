@@ -1,0 +1,120 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2021,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "extends": [
+        "plugin:unicorn/recommended",
+        "plugin:react/recommended",
+        "prettier",
+        "plugin:jest-dom/recommended"
+    ],
+    "plugins": [
+        "prettier",
+        "react-hooks",
+        "jest-dom",
+        "testing-library",
+        "@typescript-eslint"
+    ],
+    "env": {
+        "node": true,
+        "browser": true,
+        "jasmine": true,
+        "jest": true,
+        "es6": true
+    },
+    "rules": {
+        // Need to turn off the regular eslint no-unused-vars in order for the TS one to work properly
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn"
+        ],
+        "react/react-in-jsx-scope": "off",
+        "no-console": "warn",
+        "react/display-name": 0,
+        "react/prop-types": 0,
+        "react-hooks/exhaustive-deps": 0,
+        "import/named": 0,
+        "import/no-named-as-default": 0,
+        "react-hooks/rules-of-hooks": "error",
+        "prettier/prettier": "error",
+        "unicorn/no-useless-undefined": "off",
+        "unicorn/no-null": "off",
+        "unicorn/prefer-query-selector": "off",
+        "unicorn/no-array-for-each": "off",
+        "unicorn/no-array-reduce": "off",
+        "unicorn/prefer-object-from-entries": "off",
+        "unicorn/filename-case": [
+            "error",
+            {
+                "cases": {
+                    "camelCase": true,
+                    "pascalCase": true
+                }
+            }
+        ],
+        "unicorn/prevent-abbreviations": [
+            "error",
+            {
+                "replacements": {
+                    "props": {
+                        "properties": false
+                    },
+                    "i": {
+                        "index": false
+                    },
+                    "e": {
+                        "event": false,
+                        "error": false
+                    },
+                    "ref": {
+                        "reference": false
+                    },
+                    "params": {
+                        "parameters": false
+                    }
+                }
+            }
+        ]
+    },
+    "overrides": [
+        {
+            // only run testing library linting on test files and not the entire codebase
+            "files": [
+                "**/__tests__/**/*.[jt]s?(x)",
+                "**/?(*.)+(spec|test).[jt]s?(x)"
+            ],
+            "rules": {
+                "testing-library/no-node-access": "warn",
+                "testing-library/no-wait-for-side-effects": "warn"
+            },
+            "extends": [
+                "plugin:testing-library/react"
+            ]
+        }
+    ],
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ],
+                "moduleDirectory": [
+                    "node_modules",
+                    "src/"
+                ]
+            }
+        }
+    }
+}
