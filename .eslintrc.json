@@ -76,6 +76,9 @@
                     },
                     "params": {
                         "parameters": false
+                    },
+                    "ctx": {
+                        "context": false
                     }
                 }
             }

@@ -1,39 +1,26 @@
-import { getApp } from 'firebase/app';
-import { getAuth, User } from 'firebase/auth';
-import {
-  addDoc,
-  collection,
-  Firestore,
-  getDocs,
-  getFirestore,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-} from 'firebase/firestore';
 import { FormEvent, useRef, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { Button } from '@mantine/core';
+
+import { addDoc, collection, orderBy, query, serverTimestamp } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+
 import { MessageEntity } from '../../shared/Types';
+import useFirebase from '../../providers/useFirebase';
 import ChatMessage from './ChatMessage/ChatMessage';
 
 const Chatroom = () => {
-  const app = getApp('firechat');
-  const auth = getAuth(app);
-  const [user] = useAuthState(auth);
-  const store = getFirestore(getApp('firechat'));
+  const { store, user } = useFirebase();
 
-  const [inputValue, setInputValue] = useState<string>('');
-
-  const messagesRef = collection(store, 'messages').withConverter(converter);
+  const messagesRef = collection(store!, 'messages').withConverter(converter);
   const q = query(messagesRef, orderBy('createdAt'));
   const [messages] = useCollectionData(q);
 
+  const [inputValue, setInputValue] = useState<string>('');
   const scrollToRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { uid, photoURL } = user as User;
+    const { uid, photoURL } = user!;
 
     addDoc(messagesRef, { uid, photoURL, text: inputValue });
     setInputValue('');
@@ -54,7 +41,9 @@ const Chatroom = () => {
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
         />
-        <button type="submit">Say</button>
+        <Button type="submit" ml="10px">
+          Say
+        </Button>
       </form>
       <div ref={scrollToRef} style={{ paddingTop: '20px' }}>
         bla

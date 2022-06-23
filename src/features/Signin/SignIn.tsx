@@ -1,22 +1,26 @@
-import { getApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import useFirebase from '../../providers/useFirebase';
 
 export default function SignIn() {
-  const app = getApp('firechat');
-  const auth = getAuth(app);
+  const { auth, user } = useFirebase();
   const provider = new GoogleAuthProvider();
 
   const signInWithGoogle = () => {
-    signInWithPopup(auth, provider);
+    if (auth) {
+      signInWithPopup(auth, provider);
+    }
   };
 
-  const [user] = useAuthState(auth);
+  const handleSignOut = () => {
+    if (auth) {
+      signOut(auth);
+    }
+  };
 
   return (
     <>
       {user ? (
-        <button onClick={() => signOut(auth)}>sign out</button>
+        <button onClick={handleSignOut}>sign out</button>
       ) : (
         <button onClick={signInWithGoogle}>Sign in with google</button>
       )}
