@@ -7,11 +7,12 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { MessageEntity } from '../../shared/Types';
 import useFirebase from '../../providers/useFirebase';
 import ChatMessage from './ChatMessage/ChatMessage';
+import { genericConverter } from '../../shared/Converters';
 
 const Chatroom = () => {
   const { store, user } = useFirebase();
 
-  const messagesRef = collection(store!, 'messages').withConverter(converter);
+  const messagesRef = collection(store!, 'messages').withConverter(genericConverter);
   const q = query(messagesRef, orderBy('createdAt'));
   const [messages] = useCollectionData(q);
 
@@ -50,19 +51,6 @@ const Chatroom = () => {
       </div>
     </>
   );
-};
-
-const converter = {
-  toFirestore(post: any) {
-    return { ...post, bro: 'ho', createdAt: serverTimestamp() };
-  },
-  fromFirestore(snapshot: any, options: any) {
-    const data = snapshot.data(options);
-    return {
-      id: snapshot.id,
-      ...data,
-    };
-  },
 };
 
 export default Chatroom;

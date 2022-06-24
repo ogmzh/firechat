@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import useFirebase from './providers/useFirebase';
-import { SquarePlus } from 'tabler-icons-react';
 import {
   AppShell,
   Aside,
@@ -10,14 +8,15 @@ import {
   Group,
   Header,
   MediaQuery,
-  Modal,
   Navbar,
   Text,
   useMantineTheme,
 } from '@mantine/core';
+import { SquarePlus } from 'tabler-icons-react';
+import CreateChannelModal from './components/CreateChannelModal/CreateChannelModal';
 import SignIn from './components/SignIn/SignIn';
 import UserAvatar from './components/UserAvatar/UserAvatar';
-import CreateChannelModal from './components/CreateChannelModal/CreateChannelModal';
+import useFirebase from './providers/useFirebase';
 
 export default function RoutedApp() {
   const { user } = useFirebase();

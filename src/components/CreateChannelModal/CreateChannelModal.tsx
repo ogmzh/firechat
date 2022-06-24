@@ -1,5 +1,8 @@
 import { Button, Group, Input, Modal } from '@mantine/core';
 import { useInputState } from '@mantine/hooks';
+import { addDoc, collection } from 'firebase/firestore';
+import useFirebase from '../../providers/useFirebase';
+import { genericConverter } from '../../shared/Converters';
 
 interface ModalProps {
   isCreateChannelOpened: boolean;
@@ -11,8 +14,14 @@ export default function CreateChannelModal(props: ModalProps) {
 
   const [name, setName] = useInputState('');
 
+  const { store, user } = useFirebase();
+
+  const channelRef = collection(store!, 'channels').withConverter(genericConverter);
+
   const handleCreateChannel = () => {
-    console.log('yo', name);
+    addDoc(channelRef, { name, admin: user?.uid, members: [], banned: [] });
+    setName('');
+    setIsCreateChannelOpened(false);
   };
 
   const handleCancelClick = () => {
