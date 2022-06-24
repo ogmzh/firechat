@@ -5,10 +5,13 @@ import {
   Aside,
   Box,
   Burger,
+  Button,
+  Container,
   Group,
   Header,
   MediaQuery,
   Navbar,
+  Stack,
   Text,
   useMantineTheme,
 } from '@mantine/core';
@@ -71,6 +74,56 @@ export default function RoutedApp() {
                   onClick={() => setIsCreateChannelOpened(true)}
                 />
               </Group>
+              <Stack mt="lg" spacing="sm">
+                <Box
+                  sx={theme => ({
+                    backgroundColor:
+                      theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                    textAlign: 'center',
+                    padding: theme.spacing.xs,
+                    borderRadius: theme.radius.md,
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      backgroundColor:
+                        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
+                    },
+                  })}>
+                  <Text>swolo</Text>
+                </Box>
+                <Box
+                  sx={theme => ({
+                    backgroundColor:
+                      theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                    textAlign: 'center',
+                    padding: theme.spacing.xs,
+                    borderRadius: theme.radius.md,
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      backgroundColor:
+                        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
+                    },
+                  })}>
+                  <Text>yolo</Text>
+                </Box>
+                <Box
+                  sx={theme => ({
+                    backgroundColor:
+                      theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                    textAlign: 'center',
+                    padding: theme.spacing.xs,
+                    borderRadius: theme.radius.md,
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      backgroundColor:
+                        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
+                    },
+                  })}>
+                  <Text>lolo</Text>
+                </Box>
+              </Stack>
             </Navbar.Section>
             <Navbar.Section>
               <UserAvatar />
