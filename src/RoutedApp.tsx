@@ -7,24 +7,17 @@ import {
   Aside,
   Box,
   Burger,
-  Center,
-  Container,
   Header,
   MediaQuery,
   Navbar,
   Text,
   useMantineTheme,
 } from '@mantine/core';
-import UserAvatar from './components/UserAvatar/UserAvatar';
 import SignIn from './components/SignIn/SignIn';
+import UserAvatar from './components/UserAvatar/UserAvatar';
 
 export default function RoutedApp() {
   const { user } = useFirebase();
-  // <div>
-  //   <Text>lmaochat</Text>
-  //   <SignIn />
-  //   {user && <Chatroom />}
-  // </div>
 
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
@@ -82,7 +75,12 @@ export default function RoutedApp() {
         justifyContent: 'center',
       }}>
       <Box style={{ width: 400 }}>
-        <SignIn />
+        <Box style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+          <Text weight={700} size="xl" mb="20px">
+            Firechat
+          </Text>
+          <SignIn />
+        </Box>
       </Box>
     </Box>
   );
