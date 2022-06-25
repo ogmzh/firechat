@@ -1,18 +1,21 @@
-import { FormEvent, useRef, useState } from 'react';
 import { Button } from '@mantine/core';
+import { FormEvent, useRef, useState } from 'react';
 
-import { addDoc, collection, orderBy, query, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, orderBy, query } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-import { MessageEntity } from '../../shared/Types';
 import useFirebase from '../../providers/useFirebase';
-import ChatMessage from './ChatMessage/ChatMessage';
+import { STORE_COLLECTIONS } from '../../shared/Constants';
 import { genericConverter } from '../../shared/Converters';
+import { MessageEntity } from '../../shared/Types';
+import ChatMessage from './ChatMessage/ChatMessage';
 
 const Chatroom = () => {
   const { store, user } = useFirebase();
 
-  const messagesRef = collection(store!, 'messages').withConverter(genericConverter);
+  const messagesRef = collection(store!, STORE_COLLECTIONS.MESSAGES).withConverter(
+    genericConverter
+  );
   const q = query(messagesRef, orderBy('createdAt'));
   const [messages] = useCollectionData(q);
 

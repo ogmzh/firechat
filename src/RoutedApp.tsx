@@ -5,8 +5,6 @@ import {
   Aside,
   Box,
   Burger,
-  Button,
-  Container,
   Group,
   Header,
   MediaQuery,
@@ -20,6 +18,7 @@ import CreateChannelModal from './components/CreateChannelModal/CreateChannelMod
 import SignIn from './components/SignIn/SignIn';
 import UserAvatar from './components/UserAvatar/UserAvatar';
 import useFirebase from './providers/useFirebase';
+import ChannelStack from './components/ChannelStack/ChannelStack';
 
 export default function RoutedApp() {
   const { user } = useFirebase();
@@ -74,56 +73,7 @@ export default function RoutedApp() {
                   onClick={() => setIsCreateChannelOpened(true)}
                 />
               </Group>
-              <Stack mt="lg" spacing="sm">
-                <Box
-                  sx={theme => ({
-                    backgroundColor:
-                      theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-                    textAlign: 'center',
-                    padding: theme.spacing.xs,
-                    borderRadius: theme.radius.md,
-                    cursor: 'pointer',
-
-                    '&:hover': {
-                      backgroundColor:
-                        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-                    },
-                  })}>
-                  <Text>swolo</Text>
-                </Box>
-                <Box
-                  sx={theme => ({
-                    backgroundColor:
-                      theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-                    textAlign: 'center',
-                    padding: theme.spacing.xs,
-                    borderRadius: theme.radius.md,
-                    cursor: 'pointer',
-
-                    '&:hover': {
-                      backgroundColor:
-                        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-                    },
-                  })}>
-                  <Text>yolo</Text>
-                </Box>
-                <Box
-                  sx={theme => ({
-                    backgroundColor:
-                      theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-                    textAlign: 'center',
-                    padding: theme.spacing.xs,
-                    borderRadius: theme.radius.md,
-                    cursor: 'pointer',
-
-                    '&:hover': {
-                      backgroundColor:
-                        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-                    },
-                  })}>
-                  <Text>lolo</Text>
-                </Box>
-              </Stack>
+              <ChannelStack mt="lg" spacing="sm" />
             </Navbar.Section>
             <Navbar.Section>
               <UserAvatar />
