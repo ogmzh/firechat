@@ -12,13 +12,14 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core';
-import { SquarePlus } from 'tabler-icons-react';
+import { Search, SquarePlus } from 'tabler-icons-react';
 import ChannelStack, { selectedChannelAtom } from './components/ChannelStack/ChannelStack';
 import CreateChannelModal from './components/CreateChannelModal/CreateChannelModal';
 import SignIn from './components/SignIn/SignIn';
 import UserAvatar from './components/UserAvatar/UserAvatar';
 import useFirebase from './providers/useFirebase';
 import { useAtomValue } from 'jotai';
+import SearchChannelsModal from './components/SearchChannelsModal/SearchChannelsModal';
 
 export default function Shell() {
   const { user } = useFirebase();
@@ -26,14 +27,19 @@ export default function Shell() {
   const theme = useMantineTheme();
   const [isSidebarOpened, setIsSidebarOpened] = useState(false);
   const [isCreateChannelOpened, setIsCreateChannelOpened] = useState(false);
+  const [isSearchChannelsOpened, setIsSearchChannelsOpened] = useState(false);
 
   const selectedChannel = useAtomValue(selectedChannelAtom);
 
   return user ? (
     <>
       <CreateChannelModal
-        isCreateChannelOpened={isCreateChannelOpened}
-        setIsCreateChannelOpened={setIsCreateChannelOpened}
+        isModalOpen={isCreateChannelOpened}
+        setIsModalOpen={setIsCreateChannelOpened}
+      />
+      <SearchChannelsModal
+        isModalOpen={isSearchChannelsOpened}
+        setIsModalOpen={setIsSearchChannelsOpened}
       />
       <AppShell
         styles={{
@@ -69,11 +75,19 @@ export default function Shell() {
             <Navbar.Section grow mt="xs">
               <Group sx={{ justifyContent: 'space-between' }}>
                 <Text>Channels</Text>
-                <SquarePlus
-                  size={32}
-                  cursor="pointer"
-                  onClick={() => setIsCreateChannelOpened(true)}
-                />
+                <div>
+                  <SquarePlus
+                    style={{ marginRight: '10px' }}
+                    size={32}
+                    cursor="pointer"
+                    onClick={() => setIsCreateChannelOpened(true)}
+                  />
+                  <Search
+                    size={32}
+                    cursor="pointer"
+                    onClick={() => setIsSearchChannelsOpened(true)}
+                  />
+                </div>
               </Group>
               <ChannelStack mt="lg" spacing="sm" />
             </Navbar.Section>
@@ -83,11 +97,15 @@ export default function Shell() {
           </Navbar>
         }
         aside={
-          <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-            <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-              <Text>Members</Text>
-            </Aside>
-          </MediaQuery>
+          selectedChannel ? (
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
+                <Text>Membersq</Text>
+              </Aside>
+            </MediaQuery>
+          ) : (
+            <></>
+          )
         }>
         <Text>
           {selectedChannel ? selectedChannel.name : 'Resize app to see responsive navbar in action'}

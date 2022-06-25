@@ -16,8 +16,14 @@ export type ChannelPrivacy = 'private' | 'public';
 export type ChannelEntity = {
   id: string;
   admin: string;
-  banned: User[];
+  banned: { uid: string; photoURL: string; displayName: string }[];
   members: User[];
   name: string;
   privacy: ChannelPrivacy;
+  admissionRequests: string[];
+};
+
+export type ModalProps = {
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
 };

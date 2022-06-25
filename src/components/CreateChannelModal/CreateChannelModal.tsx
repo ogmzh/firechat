@@ -1,21 +1,16 @@
-import { Button, Chip, Chips, Group, Input, Modal, Text, Tooltip } from '@mantine/core';
+import { Button, Chip, Chips, Group, Input, Modal, Tooltip } from '@mantine/core';
 import { useInputState } from '@mantine/hooks';
 import { addDoc, collection } from 'firebase/firestore';
 import { useAtomValue } from 'jotai';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { AlertCircle } from 'tabler-icons-react';
 import useFirebase from '../../providers/useFirebase';
 import { genericConverter } from '../../shared/Converters';
-import { ChannelEntity, ChannelPrivacy } from '../../shared/Types';
+import { ChannelEntity, ChannelPrivacy, ModalProps } from '../../shared/Types';
 import { ownedChannelsAtom } from '../ChannelStack/ChannelStack';
 
-interface ModalProps {
-  isCreateChannelOpened: boolean;
-  setIsCreateChannelOpened: (value: boolean) => void;
-}
-
 export default function CreateChannelModal(props: ModalProps) {
-  const { isCreateChannelOpened, setIsCreateChannelOpened } = props;
+  const { isModalOpen, setIsModalOpen } = props;
 
   const [name, setName] = useInputState('');
   const [privacy, setPrivacy] = useState<ChannelPrivacy>('public');
@@ -28,12 +23,12 @@ export default function CreateChannelModal(props: ModalProps) {
   const handleCreateChannel = () => {
     addDoc(channelRef, { name, admin: user?.uid, privacy, members: [], banned: [], messages: [] });
     setName('');
-    setIsCreateChannelOpened(false);
+    setIsModalOpen(false);
   };
 
   const handleCancelClick = () => {
     setName('');
-    setIsCreateChannelOpened(false);
+    setIsModalOpen(false);
   };
 
   const maxNumberOfChannelsReached = ownedChannels.length === 5;
@@ -56,8 +51,8 @@ export default function CreateChannelModal(props: ModalProps) {
       overlayBlur={3}
       centered
       withCloseButton={false}
-      opened={isCreateChannelOpened}
-      onClose={() => setIsCreateChannelOpened(false)}
+      opened={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
       title="Create a new channel">
       <div
         style={{

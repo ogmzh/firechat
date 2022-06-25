@@ -1,4 +1,4 @@
-import { Stack, StackProps } from '@mantine/core';
+import { Divider, Stack, StackProps, Text } from '@mantine/core';
 import { collection, query, where } from 'firebase/firestore';
 import { atom, useAtom } from 'jotai';
 import { isEqual } from 'lodash-es';
@@ -32,9 +32,14 @@ export default function ChannelStack(props: StackProps) {
 
   return (
     <Stack {...props}>
-      {channels?.map(channel => (
+      <Text size="sm" hidden={ownedChannels.length === 0}>
+        Owner of
+      </Text>
+      {ownedChannels?.map(channel => (
         <ChannelLink key={channel.id} channel={channel} />
       ))}
+      <Divider my="sm" />
+      <Text size="sm">Member of</Text>
     </Stack>
   );
 }
