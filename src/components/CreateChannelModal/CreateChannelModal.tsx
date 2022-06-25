@@ -21,7 +21,15 @@ export default function CreateChannelModal(props: ModalProps) {
   const channelRef = collection(store!, 'channels').withConverter(genericConverter);
 
   const handleCreateChannel = () => {
-    addDoc(channelRef, { name, admin: user?.uid, privacy, members: [], banned: [], messages: [] });
+    addDoc(channelRef, {
+      name,
+      admin: user?.uid,
+      privacy,
+      members: [],
+      banned: [],
+      messages: [],
+      admissionRequests: [],
+    });
     setName('');
     setIsModalOpen(false);
   };

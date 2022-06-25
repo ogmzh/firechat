@@ -20,6 +20,8 @@ import UserAvatar from './components/UserAvatar/UserAvatar';
 import useFirebase from './providers/useFirebase';
 import { useAtomValue } from 'jotai';
 import SearchChannelsModal from './components/SearchChannelsModal/SearchChannelsModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Shell() {
   const { user } = useFirebase();
@@ -33,6 +35,8 @@ export default function Shell() {
 
   return user ? (
     <>
+      <ToastContainer />
+
       <CreateChannelModal
         isModalOpen={isCreateChannelOpened}
         setIsModalOpen={setIsCreateChannelOpened}

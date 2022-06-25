@@ -1,17 +1,19 @@
-/* eslint-disable unicorn/prevent-abbreviations */
-import { Box, Input, Modal, Popover, Stack, Text } from '@mantine/core';
+import { useMemo } from 'react';
+import { Box, Input, Modal, Popover, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { collection, doc, getDoc, query, updateDoc, where } from 'firebase/firestore';
-import { useMemo } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { GitPullRequest } from 'tabler-icons-react';
 import useFirebase from '../../providers/useFirebase';
-import { STORE_COLLECTIONS } from '../../shared/Constants';
+import { getToastifyProps, STORE_COLLECTIONS } from '../../shared/Constants';
 import { genericConverter } from '../../shared/Converters';
 import { ChannelEntity, ModalProps } from '../../shared/Types';
+import { toast } from 'react-toastify';
 
 export default function SearchChannelsModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
+
+  const mantineTheme = useMantineTheme();
 
   const [name, setName] = useInputState('');
   const [debouncedName] = useDebouncedValue(name, 300);
@@ -26,8 +28,9 @@ export default function SearchChannelsModal(props: ModalProps) {
     () =>
       channels
         ?.filter(channel => channel.privacy === 'public')
+        // todo filter out channels ive alraedy joined
         .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
-        .filter(channel => channel.name.toLowerCase().includes(debouncedName.toLowerCase())),
+        .filter(channel => channel.name.toLowerCase().includes(debouncedName?.toLowerCase())),
     [channels, debouncedName]
   );
 
@@ -35,12 +38,19 @@ export default function SearchChannelsModal(props: ModalProps) {
     const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, id);
     const channelRef = await getDoc(channelSnapshot);
     const channelEntity = channelRef.data() as ChannelEntity;
-    const existingAdmissionRequest = channelEntity.admissionRequests.includes(user?.uid!);
+    const existingAdmissionRequest = channelEntity.admissionRequests?.includes(user?.uid!);
     await updateDoc(channelSnapshot, {
       admissionRequests: existingAdmissionRequest
         ? channelEntity.admissionRequests.filter(uid => uid !== user?.uid)
         : [...channelEntity.admissionRequests, user?.uid],
     });
+
+    toast[existingAdmissionRequest ? 'info' : 'success'](
+      existingAdmissionRequest
+        ? 'Cancelled your join channel request.'
+        : 'Successfully requested to join channel.',
+      getToastifyProps(mantineTheme)
+    );
 
     // const tempBan = doc(store!, STORE_COLLECTIONS.CHANNELS, 'n5KE8KBMG04Jbt9D6DC0');
     // await updateDoc(tempBan, {
@@ -93,7 +103,7 @@ export default function SearchChannelsModal(props: ModalProps) {
                   <GitPullRequest
                     size={28}
                     cursor="pointer"
-                    color={channel.admissionRequests.includes(user?.uid ?? '') ? 'lime' : 'cyan'}
+                    color={channel.admissionRequests?.includes(user?.uid ?? '') ? 'lime' : 'cyan'}
                     onClick={() => handleRequestChannelAccess(channel.id)}
                   />
                 }>
