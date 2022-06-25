@@ -7,6 +7,7 @@ import { AlertCircle } from 'tabler-icons-react';
 import useFirebase from '../../providers/useFirebase';
 import { genericConverter } from '../../shared/Converters';
 import { ChannelEntity, ChannelPrivacy, ModalProps } from '../../shared/Types';
+import { authUserToProfile } from '../../shared/Utils';
 import { ownedChannelsAtom } from '../ChannelStack/ChannelStack';
 
 export default function CreateChannelModal(props: ModalProps) {
@@ -23,7 +24,7 @@ export default function CreateChannelModal(props: ModalProps) {
   const handleCreateChannel = () => {
     addDoc<ChannelEntity>(channelRef, {
       name,
-      admin: { displayName: user?.displayName!, uid: user?.uid!, photoURL: user?.photoURL! },
+      admin: authUserToProfile(user!),
       privacy,
       members: [],
       banned: [],

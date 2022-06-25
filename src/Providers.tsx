@@ -1,4 +1,5 @@
 import { MantineProvider } from '@mantine/core';
+import { Provider } from 'jotai';
 import FirebaseProvider from './providers/FirebaseProvider';
 import Shell from './Shell';
 
@@ -28,7 +29,9 @@ export default function Providers() {
         withGlobalStyles
         withNormalizeCSS>
         <FirebaseProvider>
-          <Shell />
+          <Provider>
+            <Shell />
+          </Provider>
         </FirebaseProvider>
       </MantineProvider>
     </>

@@ -15,7 +15,7 @@ const ChannelLink: FC<{ channel: ChannelEntity }> = props => {
           selectedChannel?.id === channel.id ? theme.colors.dark[4] : theme.colors.dark[6],
         textAlign: 'center',
         padding: theme.spacing.xs,
-        borderRadius: theme.radius.md,
+        borderRadius: theme.radius.sm,
         cursor: 'pointer',
         '&:hover': {
           backgroundColor: theme.colors.dark[5],

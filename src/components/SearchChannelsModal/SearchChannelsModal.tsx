@@ -9,6 +9,7 @@ import useFirebase from '../../providers/useFirebase';
 import { getToastifyProps, STORE_COLLECTIONS } from '../../shared/Constants';
 import { genericConverter } from '../../shared/Converters';
 import { ChannelEntity, ModalProps } from '../../shared/Types';
+import { authUserToProfile } from '../../shared/Utils';
 
 export default function SearchChannelsModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
@@ -22,14 +23,14 @@ export default function SearchChannelsModal(props: ModalProps) {
   const channelsRef = collection(store!, STORE_COLLECTIONS.CHANNELS).withConverter(
     genericConverter
   );
-  const q = query(channelsRef, where('admin', '!=', user?.uid));
+  const q = query(channelsRef, where('admin.uid', '!=', user?.uid));
   const [channels] = useCollectionData<ChannelEntity>(q);
   const filteredChannels = useMemo(
     () =>
       channels
         ?.filter(channel => channel.privacy === 'public')
-        // todo filter out channels ive alraedy joined
         .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
+        .filter(channel => !channel.members.some(existingUser => existingUser.uid === user?.uid))
         .filter(channel => channel.name.toLowerCase().includes(debouncedName?.toLowerCase())),
     [channels, debouncedName]
   );
@@ -38,11 +39,13 @@ export default function SearchChannelsModal(props: ModalProps) {
     const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, id);
     const channelRef = await getDoc(channelSnapshot);
     const channelEntity = channelRef.data() as ChannelEntity;
-    const existingAdmissionRequest = channelEntity.admissionRequests?.includes(user?.uid!);
+    const existingAdmissionRequest = channelEntity.admissionRequests?.some(
+      existingUser => existingUser?.uid === user?.uid
+    );
     await updateDoc(channelSnapshot, {
       admissionRequests: existingAdmissionRequest
-        ? channelEntity.admissionRequests.filter(uid => uid !== user?.uid)
-        : [...channelEntity.admissionRequests, user?.uid],
+        ? channelEntity.admissionRequests.filter(existingUser => existingUser.uid !== user?.uid)
+        : [...channelEntity.admissionRequests, authUserToProfile(user!)],
     });
 
     toast[existingAdmissionRequest ? 'info' : 'success'](
@@ -95,7 +98,7 @@ export default function SearchChannelsModal(props: ModalProps) {
                 justifyContent: 'space-between',
               })}>
               <div>
-                <Text size="xs">{`${channel.admin.displayName}'s`}</Text>
+                <Text size="xs">{`${channel.admin.email}: ${channel.admin.displayName}`}</Text>
                 <Text lineClamp={1} title={channel.name} size="xl">
                   {channel.name}
                 </Text>
@@ -103,7 +106,11 @@ export default function SearchChannelsModal(props: ModalProps) {
               <GitPullRequest
                 size={28}
                 cursor="pointer"
-                color={channel.admissionRequests?.includes(user?.uid ?? '') ? 'lime' : 'cyan'}
+                color={
+                  channel.admissionRequests?.some(existingUser => existingUser?.uid === user?.uid)
+                    ? 'lime'
+                    : 'cyan'
+                }
                 onClick={() => handleRequestChannelAccess(channel.id!)}
               />
             </Box>

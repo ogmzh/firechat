@@ -20,8 +20,9 @@ import UserAvatar from './components/UserAvatar/UserAvatar';
 import useFirebase from './providers/useFirebase';
 import { useAtomValue } from 'jotai';
 import SearchChannelsModal from './components/SearchChannelsModal/SearchChannelsModal';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ChannelMembers from './components/ChannelMembers/ChannelMembers';
 
 export default function Shell() {
   const { user } = useFirebase();
@@ -104,7 +105,7 @@ export default function Shell() {
           selectedChannel ? (
             <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
               <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-                <Text>Membersq</Text>
+                <ChannelMembers />
               </Aside>
             </MediaQuery>
           ) : (

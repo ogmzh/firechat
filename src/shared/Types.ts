@@ -10,7 +10,7 @@ export type MessageEntity = {
 
 export type ChannelPrivacy = 'private' | 'public';
 
-export type UserProfile = { uid: string; photoURL: string; displayName: string };
+export type UserProfile = { uid: string; photoURL: string; displayName: string; email: string };
 
 export type ChannelEntity = {
   id?: string;
@@ -19,7 +19,7 @@ export type ChannelEntity = {
   members: UserProfile[];
   name: string;
   privacy: ChannelPrivacy;
-  admissionRequests: string[];
+  admissionRequests: UserProfile[];
   messages: MessageEntity[];
 };
 
