@@ -26,7 +26,7 @@ export default function SearchChannelsModal(props: ModalProps) {
     () =>
       channels
         ?.filter(channel => channel.privacy === 'public')
-        .filter(channel => channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
+        .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
         .filter(channel => channel.name.toLowerCase().includes(debouncedName.toLowerCase())),
     [channels, debouncedName]
   );
@@ -43,7 +43,6 @@ export default function SearchChannelsModal(props: ModalProps) {
     });
 
     // const tempBan = doc(store!, STORE_COLLECTIONS.CHANNELS, 'n5KE8KBMG04Jbt9D6DC0');
-    // let myUser = user!;
     // await updateDoc(tempBan, {
     //   banned: [{ uid: user?.uid!, photoURL: user?.photoURL!, displayName: user?.displayName! }],
     // });
