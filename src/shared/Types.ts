@@ -11,10 +11,13 @@ export type MessageEntity = {
   };
 };
 
+export type ChannelPrivacy = 'private' | 'public';
+
 export type ChannelEntity = {
   id: string;
   admin: string;
   banned: User[];
   members: User[];
   name: string;
+  privacy: ChannelPrivacy;
 };
