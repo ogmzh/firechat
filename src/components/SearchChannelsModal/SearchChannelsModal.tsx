@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
-import { Box, Input, Modal, Popover, Stack, Text, useMantineTheme } from '@mantine/core';
+import { Box, Input, Modal, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { collection, doc, getDoc, query, updateDoc, where } from 'firebase/firestore';
+import { useMemo } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { toast } from 'react-toastify';
 import { GitPullRequest } from 'tabler-icons-react';
 import useFirebase from '../../providers/useFirebase';
 import { getToastifyProps, STORE_COLLECTIONS } from '../../shared/Constants';
 import { genericConverter } from '../../shared/Converters';
 import { ChannelEntity, ModalProps } from '../../shared/Types';
-import { toast } from 'react-toastify';
 
 export default function SearchChannelsModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
@@ -94,25 +94,18 @@ export default function SearchChannelsModal(props: ModalProps) {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               })}>
-              <Text lineClamp={1} title={channel.name}>
-                {channel.name}
-              </Text>
-              <Popover
-                opened={false}
-                target={
-                  <GitPullRequest
-                    size={28}
-                    cursor="pointer"
-                    color={channel.admissionRequests?.includes(user?.uid ?? '') ? 'lime' : 'cyan'}
-                    onClick={() => handleRequestChannelAccess(channel.id)}
-                  />
-                }>
-                <div style={{ display: 'flex' }}>
-                  <Text size="sm">
-                    Thanks for stopping by and checking Mantine, you are awesome!
-                  </Text>
-                </div>
-              </Popover>
+              <div>
+                <Text size="xs">{`${channel.admin.displayName}'s`}</Text>
+                <Text lineClamp={1} title={channel.name} size="xl">
+                  {channel.name}
+                </Text>
+              </div>
+              <GitPullRequest
+                size={28}
+                cursor="pointer"
+                color={channel.admissionRequests?.includes(user?.uid ?? '') ? 'lime' : 'cyan'}
+                onClick={() => handleRequestChannelAccess(channel.id!)}
+              />
             </Box>
           ))}
         </Stack>

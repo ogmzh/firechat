@@ -26,7 +26,7 @@ const Chatroom = () => {
     e.preventDefault();
     const { uid, photoURL } = user!;
 
-    addDoc(messagesRef, { uid, photoURL, text: inputValue });
+    // addDoc<MessageEntity>(messagesRef, { author: {displayName: } text: inputValue });
     setInputValue('');
     scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
   };

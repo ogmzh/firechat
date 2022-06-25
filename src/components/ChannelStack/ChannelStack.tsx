@@ -1,8 +1,8 @@
 import { Divider, Stack, StackProps, Text } from '@mantine/core';
+import { useDidUpdate } from '@mantine/hooks';
 import { collection, query, where } from 'firebase/firestore';
 import { atom, useAtom } from 'jotai';
 import { isEqual } from 'lodash-es';
-import { useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import useFirebase from '../../providers/useFirebase';
 import { STORE_COLLECTIONS } from '../../shared/Constants';
@@ -21,14 +21,14 @@ export default function ChannelStack(props: StackProps) {
     genericConverter
   );
 
-  const q = query(channelsRef, where('admin', '==', user?.uid));
+  const q = query<ChannelEntity>(channelsRef, where('admin.uid', '==', user?.uid));
   const [channels] = useCollectionData<ChannelEntity>(q);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     if (!!channels && !isEqual(channels, ownedChannels)) {
       setOwnedChannels(channels);
     }
-  }, [JSON.stringify(channels)]);
+  }, [channels]);
 
   return (
     <Stack {...props}>

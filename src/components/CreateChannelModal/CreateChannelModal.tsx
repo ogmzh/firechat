@@ -21,9 +21,9 @@ export default function CreateChannelModal(props: ModalProps) {
   const channelRef = collection(store!, 'channels').withConverter(genericConverter);
 
   const handleCreateChannel = () => {
-    addDoc(channelRef, {
+    addDoc<ChannelEntity>(channelRef, {
       name,
-      admin: user?.uid,
+      admin: { displayName: user?.displayName!, uid: user?.uid!, photoURL: user?.photoURL! },
       privacy,
       members: [],
       banned: [],
