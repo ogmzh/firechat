@@ -1,11 +1,14 @@
 import { Stack, StackProps } from '@mantine/core';
 import { collection, query, where } from 'firebase/firestore';
+import { atom } from 'jotai';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import useFirebase from '../../providers/useFirebase';
 import { STORE_COLLECTIONS } from '../../shared/Constants';
 import { genericConverter } from '../../shared/Converters';
 import { ChannelEntity } from '../../shared/Types';
 import ChannelLink from '../ChannelLink/ChannelLink';
+
+export const selectedChannelAtom = atom<ChannelEntity | null>(null);
 
 export default function ChannelStack(props: StackProps) {
   const { store, user } = useFirebase();

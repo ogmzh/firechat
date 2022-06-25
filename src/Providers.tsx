@@ -1,6 +1,6 @@
 import { MantineProvider } from '@mantine/core';
 import FirebaseProvider from './providers/FirebaseProvider';
-import RoutedApp from './RoutedApp';
+import Shell from './Shell';
 
 export default function Providers() {
   return (
@@ -28,7 +28,7 @@ export default function Providers() {
         withGlobalStyles
         withNormalizeCSS>
         <FirebaseProvider>
-          <RoutedApp />
+          <Shell />
         </FirebaseProvider>
       </MantineProvider>
     </>

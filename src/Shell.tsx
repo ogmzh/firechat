@@ -9,23 +9,25 @@ import {
   Header,
   MediaQuery,
   Navbar,
-  Stack,
   Text,
   useMantineTheme,
 } from '@mantine/core';
 import { SquarePlus } from 'tabler-icons-react';
+import ChannelStack, { selectedChannelAtom } from './components/ChannelStack/ChannelStack';
 import CreateChannelModal from './components/CreateChannelModal/CreateChannelModal';
 import SignIn from './components/SignIn/SignIn';
 import UserAvatar from './components/UserAvatar/UserAvatar';
 import useFirebase from './providers/useFirebase';
-import ChannelStack from './components/ChannelStack/ChannelStack';
+import { useAtomValue } from 'jotai';
 
-export default function RoutedApp() {
+export default function Shell() {
   const { user } = useFirebase();
 
   const theme = useMantineTheme();
   const [isSidebarOpened, setIsSidebarOpened] = useState(false);
   const [isCreateChannelOpened, setIsCreateChannelOpened] = useState(false);
+
+  const selectedChannel = useAtomValue(selectedChannelAtom);
 
   return user ? (
     <>
@@ -87,7 +89,9 @@ export default function RoutedApp() {
             </Aside>
           </MediaQuery>
         }>
-        <Text>Resize app to see responsive navbar in action</Text>
+        <Text>
+          {selectedChannel ? selectedChannel.name : 'Resize app to see responsive navbar in action'}
+        </Text>
       </AppShell>
     </>
   ) : (
