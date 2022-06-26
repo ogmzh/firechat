@@ -21,8 +21,9 @@ import useFirebase from './providers/useFirebase';
 import { useAtomValue } from 'jotai';
 import SearchChannelsModal from './components/SearchChannelsModal/SearchChannelsModal';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import ChannelMembers from './components/ChannelMembers/ChannelMembers';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Shell() {
   const { user } = useFirebase();
@@ -37,7 +38,6 @@ export default function Shell() {
   return user ? (
     <>
       <ToastContainer />
-
       <CreateChannelModal
         isModalOpen={isCreateChannelOpened}
         setIsModalOpen={setIsCreateChannelOpened}
@@ -49,7 +49,7 @@ export default function Shell() {
       <AppShell
         styles={{
           main: {
-            background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+            background: theme.colors.dark[8],
           },
         }}
         navbarOffsetBreakpoint="sm"
