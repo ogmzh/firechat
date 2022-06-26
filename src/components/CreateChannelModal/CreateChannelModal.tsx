@@ -1,13 +1,10 @@
 import { Button, Chip, Chips, Group, Input, Modal, Tooltip } from '@mantine/core';
 import { useInputState } from '@mantine/hooks';
-import { addDoc, collection } from 'firebase/firestore';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { AlertCircle } from 'tabler-icons-react';
-import useFirebase from '../../providers/useFirebase';
-import { genericConverter } from '../../shared/Converters';
+import useOwnChannels from '../../services/firebase/useOwnChannels';
 import { ChannelEntity, ChannelPrivacy, ModalProps } from '../../shared/Types';
-import { authUserToProfile } from '../../shared/Utils';
 import { ownedChannelsAtom } from '../ChannelStack/ChannelStack';
 
 export default function CreateChannelModal(props: ModalProps) {
@@ -16,15 +13,12 @@ export default function CreateChannelModal(props: ModalProps) {
   const [name, setName] = useInputState('');
   const [privacy, setPrivacy] = useState<ChannelPrivacy>('public');
 
-  const { store, user } = useFirebase();
   const ownedChannels: ChannelEntity[] = useAtomValue(ownedChannelsAtom);
-
-  const channelRef = collection(store!, 'channels').withConverter(genericConverter);
+  const { createChannel } = useOwnChannels();
 
   const handleCreateChannel = () => {
-    addDoc<ChannelEntity>(channelRef, {
+    createChannel({
       name,
-      admin: authUserToProfile(user!),
       privacy,
       members: [],
       banned: [],

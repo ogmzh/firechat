@@ -14,13 +14,13 @@ export type UserProfile = { uid: string; photoURL: string; displayName: string; 
 
 export type ChannelEntity = {
   id?: string;
-  admin: UserProfile;
-  banned: UserProfile[];
-  members: UserProfile[];
   name: string;
+  admin: UserProfile;
   privacy: ChannelPrivacy;
-  admissionRequests: UserProfile[];
+  members: UserProfile[];
+  banned: UserProfile[];
   messages: MessageEntity[];
+  admissionRequests: UserProfile[];
 };
 
 export type ModalProps = {

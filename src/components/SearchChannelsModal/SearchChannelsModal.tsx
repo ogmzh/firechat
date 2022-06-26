@@ -1,15 +1,12 @@
 import { Box, Input, Modal, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
-import { collection, doc, getDoc, query, updateDoc, where } from 'firebase/firestore';
 import { useMemo } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { toast } from 'react-toastify';
 import { GitPullRequest } from 'tabler-icons-react';
 import useFirebase from '../../providers/useFirebase';
-import { getToastifyProps, STORE_COLLECTIONS } from '../../shared/Constants';
-import { genericConverter } from '../../shared/Converters';
-import { ChannelEntity, ModalProps } from '../../shared/Types';
-import { authUserToProfile } from '../../shared/Utils';
+import useCommunalChannels from '../../services/firebase/useCommunalChannels';
+import { getToastifyProps } from '../../shared/Constants';
+import { ModalProps } from '../../shared/Types';
 
 export default function SearchChannelsModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
@@ -19,37 +16,22 @@ export default function SearchChannelsModal(props: ModalProps) {
   const [name, setName] = useInputState('');
   const [debouncedName] = useDebouncedValue(name, 300);
 
-  const { user, store } = useFirebase();
-  const channelsRef = collection(store!, STORE_COLLECTIONS.CHANNELS).withConverter(
-    genericConverter
-  );
-  const q = query(channelsRef, where('admin.uid', '!=', user?.uid));
-  const [channels] = useCollectionData<ChannelEntity>(q);
+  const { user } = useFirebase();
+
+  const { channels, requestToggleChannelAccess } = useCommunalChannels();
   const filteredChannels = useMemo(
     () =>
-      channels
-        ?.filter(channel => channel.privacy === 'public')
-        .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
-        .filter(channel => !channel.members.some(existingUser => existingUser.uid === user?.uid))
-        .filter(channel => channel.name.toLowerCase().includes(debouncedName?.toLowerCase())),
+      channels?.filter(channel =>
+        channel.name.toLowerCase().includes(debouncedName?.toLowerCase())
+      ),
     [channels, debouncedName]
   );
 
   const handleRequestChannelAccess = async (id: string): Promise<void> => {
-    const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, id);
-    const channelRef = await getDoc(channelSnapshot);
-    const channelEntity = channelRef.data() as ChannelEntity;
-    const existingAdmissionRequest = channelEntity.admissionRequests?.some(
-      existingUser => existingUser?.uid === user?.uid
-    );
-    await updateDoc(channelSnapshot, {
-      admissionRequests: existingAdmissionRequest
-        ? channelEntity.admissionRequests.filter(existingUser => existingUser.uid !== user?.uid)
-        : [...channelEntity.admissionRequests, authUserToProfile(user!)],
-    });
+    const previousAdmissionRequestCancelled = await requestToggleChannelAccess(id);
 
-    toast[existingAdmissionRequest ? 'info' : 'success'](
-      existingAdmissionRequest
+    toast[previousAdmissionRequestCancelled ? 'info' : 'success'](
+      previousAdmissionRequestCancelled
         ? 'Cancelled your join channel request.'
         : 'Successfully requested to join channel.',
       getToastifyProps(mantineTheme)
