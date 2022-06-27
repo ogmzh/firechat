@@ -1,4 +1,4 @@
-import { Button, Group, Mark, Modal, Stack, Text } from '@mantine/core';
+import { Button, Group, Modal, Stack, Text } from '@mantine/core';
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 import useOwnChannels from '../../../services/firebase/useOwnChannels';
@@ -6,17 +6,18 @@ import { ModalProps } from '../../../shared/Types';
 import { selectedChannelAtom } from '../../ChannelStack/ChannelStack';
 import { UserPermissionProps } from '../ChannelMembers';
 
-export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps) {
-  const { user, channel, setIsModalOpen } = props;
+export default function KickUserModal(
+  props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps
+) {
+  const { channel, user, setIsModalOpen } = props;
   const [isLoading, setIsLoading] = useState(false);
-
-  const { banUserFromChannel } = useOwnChannels();
-
   const setSelectedChannel = useSetAtom(selectedChannelAtom);
+
+  const { kickUserFromChannel } = useOwnChannels();
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    await banUserFromChannel(user!, channel.id!);
+    await kickUserFromChannel(user!, channel.id!);
 
     setSelectedChannel(previous => ({
       ...previous!,
@@ -36,10 +37,10 @@ export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & Us
       withCloseButton={false}
       opened={!!user}
       onClose={() => setIsModalOpen(false)}
-      title="Confirm user ban">
+      title="Confirm user kick">
       <Stack spacing="xl">
         <Text align="center">
-          Are you sure you want to <Mark>ban</Mark>{' '}
+          Are you sure you want to kick{' '}
           <Text weight={600} style={{ display: 'inline' }}>
             {user?.displayName}
           </Text>{' '}

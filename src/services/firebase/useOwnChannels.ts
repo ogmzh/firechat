@@ -45,6 +45,16 @@ export default function useOwnChannels() {
     });
   };
 
+  const kickUserFromChannel = async (kickedUser: UserProfile, channelId: string) => {
+    const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, channelId);
+    const channelRef = await getDoc(channelSnapshot);
+    const channelEntity = channelRef.data() as ChannelEntity;
+
+    await updateDoc(channelSnapshot, {
+      members: channelEntity.members.filter(member => member.uid !== kickedUser.uid),
+    });
+  };
+
   const confirmDenyChannelPermissionRequest = async (newUser: UserProfile, channelId: string) => {
     const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, channelId);
     const channelRef = await getDoc(channelSnapshot);
@@ -60,6 +70,7 @@ export default function useOwnChannels() {
     channels,
     createChannel,
     banUserFromChannel,
+    kickUserFromChannel,
     confirmChannelPermissionRequest,
     confirmDenyChannelPermissionRequest,
   };
