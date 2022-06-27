@@ -1,4 +1,4 @@
-import { Button, Mark, Modal, Stack, Text } from '@mantine/core';
+import { Box, Button, Group, Mark, Modal, Stack, Text } from '@mantine/core';
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 import useOwnChannels from '../../../services/firebase/useOwnChannels';
@@ -28,7 +28,7 @@ export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & Us
   return (
     <Modal
       transition="fade"
-      transitionDuration={600}
+      transitionDuration={200}
       transitionTimingFunction="ease"
       overlayOpacity={0.55}
       overlayBlur={3}
@@ -50,9 +50,22 @@ export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & Us
           </Text>
           ?
         </Text>
-        <Button onClick={handleConfirmClick} loading={isLoading}>
-          Confirm
-        </Button>
+        <Group style={{ justifyContent: 'center' }}>
+          <Group style={{ flex: 1 }}>
+            <Button
+              onClick={() => setIsModalOpen(false)}
+              variant="outline"
+              loading={isLoading}
+              fullWidth>
+              Cancel
+            </Button>
+          </Group>
+          <Group style={{ flex: 1 }}>
+            <Button onClick={handleConfirmClick} loading={isLoading} fullWidth>
+              Confirm
+            </Button>
+          </Group>
+        </Group>
       </Stack>
     </Modal>
   );

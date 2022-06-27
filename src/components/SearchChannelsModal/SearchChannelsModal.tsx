@@ -41,7 +41,7 @@ export default function SearchChannelsModal(props: ModalProps) {
   return (
     <Modal
       transition="fade"
-      transitionDuration={600}
+      transitionDuration={200}
       transitionTimingFunction="ease"
       overlayOpacity={0.55}
       overlayBlur={3}

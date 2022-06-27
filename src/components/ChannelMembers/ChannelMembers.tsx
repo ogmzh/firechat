@@ -39,7 +39,7 @@ export default function ChannelMembers() {
 
           {selectedChannel?.admissionRequests.map(user => (
             <div key={user.uid}>
-              <Text>Member Requests</Text>
+              <Text mb="xs">Member Requests</Text>
               <ChannelMember user={user}>
                 <div>
                   <Checkbox
@@ -61,11 +61,16 @@ export default function ChannelMembers() {
           ))}
         </>
       )}
+      <Text>Channel members</Text>
+      {selectedChannel?.admin.uid !== user?.uid && (
+        <ChannelMember user={selectedChannel!.admin}>
+          <Text weight={200}>Admin</Text>
+        </ChannelMember>
+      )}
       {selectedChannel?.members
         .filter(member => member.uid !== user?.uid)
         .map(member => (
           <div key={member.uid}>
-            <Text>Channel members</Text>
             <ChannelMember user={member}>
               {selectedChannel.admin.uid === user?.uid && (
                 <>

@@ -45,7 +45,7 @@ export default function CreateChannelModal(props: ModalProps) {
   return (
     <Modal
       transition="fade"
-      transitionDuration={600}
+      transitionDuration={200}
       transitionTimingFunction="ease"
       overlayOpacity={0.55}
       overlayBlur={3}
@@ -81,13 +81,25 @@ export default function CreateChannelModal(props: ModalProps) {
             <Chip value="private">Private</Chip>
           </Chips>
         </Group>
-        <Group mt="xl" spacing="xl">
-          <Button color="red" onClick={handleCancelClick}>
-            Cancel
-          </Button>
-          <Button onClick={handleCreateChannel} disabled={!name || maxNumberOfChannelsReached}>
-            Create
-          </Button>
+        <Group
+          mt="lg"
+          style={{
+            justifyContent: 'center',
+            width: '100%',
+          }}>
+          <Group style={{ flex: 1 }}>
+            <Button variant="outline" onClick={handleCancelClick} fullWidth>
+              Cancel
+            </Button>
+          </Group>
+          <Group style={{ flex: 1 }}>
+            <Button
+              onClick={handleCreateChannel}
+              disabled={!name || maxNumberOfChannelsReached}
+              fullWidth>
+              Create
+            </Button>
+          </Group>
         </Group>
       </div>
     </Modal>
