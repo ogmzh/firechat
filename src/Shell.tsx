@@ -35,7 +35,28 @@ export default function Shell() {
 
   const selectedChannel = useAtomValue(selectedChannelAtom);
 
-  return user ? (
+  if (!user) {
+    return (
+      <Box
+        style={{
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Box style={{ width: 400 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+            <Text weight={700} size="xl" mb="20px">
+              Firechat
+            </Text>
+            <SignIn />
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+
+  return (
     <>
       <ToastContainer />
       <CreateChannelModal
@@ -117,22 +138,5 @@ export default function Shell() {
         </Text>
       </AppShell>
     </>
-  ) : (
-    <Box
-      style={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Box style={{ width: 400 }}>
-        <Box style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-          <Text weight={700} size="xl" mb="20px">
-            Firechat
-          </Text>
-          <SignIn />
-        </Box>
-      </Box>
-    </Box>
   );
 }

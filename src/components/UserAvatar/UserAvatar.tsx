@@ -5,6 +5,7 @@ import SignOut from '../SignOut/SignOut';
 export default function UserAvatar() {
   const theme = useMantineTheme();
   const { user } = useFirebase();
+
   return (
     <Box
       sx={{
