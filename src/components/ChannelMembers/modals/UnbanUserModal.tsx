@@ -1,4 +1,4 @@
-import { Button, Group, Mark, Modal, Stack, Text } from '@mantine/core';
+import { Button, Group, Modal, Stack, Text } from '@mantine/core';
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 import useOwnChannels from '../../../services/firebase/useOwnChannels';
@@ -6,22 +6,23 @@ import { ModalProps } from '../../../shared/Types';
 import { selectedChannelAtom } from '../../ChannelStack/ChannelStack';
 import { UserPermissionProps } from '../ChannelMembers';
 
-export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps) {
+export default function UnbanUserModal(
+  props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps
+) {
   const { user, channel, setIsModalOpen } = props;
   const [isLoading, setIsLoading] = useState(false);
-
-  const { banUserFromChannel } = useOwnChannels();
+  const { unbanUserFromChannel } = useOwnChannels();
 
   const setSelectedChannel = useSetAtom(selectedChannelAtom);
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    await banUserFromChannel(user!, channel.id!);
+    await unbanUserFromChannel(user!, channel.id!);
 
     setSelectedChannel(previous => ({
       ...previous!,
-      members: previous!.members.filter(member => member.uid !== user!.uid),
-      banned: [...previous!.banned, user!],
+      banned: previous!.banned.filter(member => member.uid !== user!.uid),
+      members: [...previous!.members, user!],
     }));
     setIsModalOpen(false);
     setIsLoading(false);
@@ -37,10 +38,10 @@ export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & Us
       withCloseButton={false}
       opened={!!user}
       onClose={() => setIsModalOpen(false)}
-      title="Confirm user ban">
+      title="Confirm user unban">
       <Stack spacing="xl">
         <Text align="center">
-          Are you sure you want to <Mark>ban</Mark>{' '}
+          Are you sure you want to unban{' '}
           <Text weight={600} style={{ display: 'inline' }}>
             {user?.displayName}
           </Text>{' '}
