@@ -5,6 +5,7 @@ import {
   Aside,
   Box,
   Burger,
+  Button,
   Group,
   Header,
   MediaQuery,
@@ -24,6 +25,7 @@ import { ToastContainer } from 'react-toastify';
 import ChannelMembers from './components/ChannelMembers/ChannelMembers';
 
 import 'react-toastify/dist/ReactToastify.css';
+import ChannelOptions from './components/ChannelOptions/ChannelOptions';
 
 export default function Shell() {
   const { user } = useFirebase();
@@ -125,8 +127,13 @@ export default function Shell() {
         aside={
           selectedChannel ? (
             <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
+              <Aside
+                p="md"
+                hiddenBreakpoint="sm"
+                width={{ sm: 200, lg: 300 }}
+                style={{ justifyContent: 'space-between' }}>
                 <ChannelMembers />
+                <ChannelOptions />
               </Aside>
             </MediaQuery>
           ) : (
