@@ -1,11 +1,9 @@
 import { Button, Chip, Chips, Group, Input, Modal, Tooltip } from '@mantine/core';
 import { useInputState } from '@mantine/hooks';
-import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { AlertCircle } from 'tabler-icons-react';
 import useOwnChannels from '../../services/firebase/useOwnChannels';
-import { ChannelEntity, ChannelPrivacy, ModalProps } from '../../shared/Types';
-import { ownedChannelsAtom } from '../ChannelStack/ChannelStack';
+import { ChannelPrivacy, ModalProps } from '../../shared/Types';
 
 export default function CreateChannelModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
@@ -13,8 +11,7 @@ export default function CreateChannelModal(props: ModalProps) {
   const [name, setName] = useInputState('');
   const [privacy, setPrivacy] = useState<ChannelPrivacy>('public');
 
-  const ownedChannels: ChannelEntity[] = useAtomValue(ownedChannelsAtom);
-  const { createChannel } = useOwnChannels();
+  const { createChannel, channels: ownedChannels } = useOwnChannels();
 
   const handleCreateChannel = () => {
     createChannel({
@@ -34,7 +31,7 @@ export default function CreateChannelModal(props: ModalProps) {
     setIsModalOpen(false);
   };
 
-  const maxNumberOfChannelsReached = ownedChannels.length === 5;
+  const maxNumberOfChannelsReached = ownedChannels?.length === 5;
   const ErrorTooltip = (
     <Tooltip
       label="Can not create any more channels."
