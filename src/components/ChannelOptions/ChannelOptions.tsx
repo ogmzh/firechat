@@ -11,8 +11,8 @@ export default function ChannelOptions() {
   const { kickUserFromChannel } = useOwnChannels();
 
   const handleLeaveChannel = async () => {
-    await kickUserFromChannel(authUserToProfile(user!), selectedChannel?.id!);
     setSelectedChannel(null);
+    await kickUserFromChannel(authUserToProfile(user!), selectedChannel?.id!);
   };
 
   if (selectedChannel?.admin.uid === user?.uid) {
