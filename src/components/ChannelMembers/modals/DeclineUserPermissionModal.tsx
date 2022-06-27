@@ -1,37 +1,29 @@
 import { Button, Modal, Stack, Text } from '@mantine/core';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
-import useFirebase from '../../providers/useFirebase';
-import { STORE_COLLECTIONS } from '../../shared/Constants';
-import { ChannelEntity, ModalProps } from '../../shared/Types';
-import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
-import { UserPermissionProps } from './ChannelMembers';
+import useOwnChannels from '../../../services/firebase/useOwnChannels';
+import { ModalProps } from '../../../shared/Types';
+import { selectedChannelAtom } from '../../ChannelStack/ChannelStack';
+import { UserPermissionProps } from '../ChannelMembers';
 
 export default function DeclineUserPermissionModal(
   props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps
 ) {
   const { channel, user, setIsModalOpen } = props;
-  const { store } = useFirebase();
 
+  const { confirmDenyChannelPermissionRequest } = useOwnChannels();
   const [isLoading, setIsLoading] = useState(false);
 
   const setSelectedChannel = useSetAtom(selectedChannelAtom);
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, channel.id!);
-    const channelRef = await getDoc(channelSnapshot);
-    const channelEntity = channelRef.data() as ChannelEntity;
 
-    await updateDoc(channelSnapshot, {
-      admissionRequests: channelEntity.admissionRequests.filter(
-        request => request.uid !== user?.uid
-      ),
-    });
+    confirmDenyChannelPermissionRequest(user!, channel.id!);
 
     setSelectedChannel(previous => ({
       ...previous!,
+      members: previous!.members.filter(member => member.uid !== user?.uid),
       admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
     }));
     setIsModalOpen(false);

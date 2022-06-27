@@ -35,9 +35,13 @@ export default function useCommunalChannels() {
 
   return {
     requestToggleChannelAccess,
-    channels: channels
+    searchableChannels: channels
       ?.filter(channel => channel.privacy === 'public')
       .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
       .filter(channel => !channel.members.some(existingUser => existingUser.uid === user?.uid)),
+    memberOfChannels: channels
+      ?.filter(channel => channel.privacy === 'public')
+      .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
+      .filter(channel => channel.members.some(existingUser => existingUser.uid === user?.uid)),
   };
 }

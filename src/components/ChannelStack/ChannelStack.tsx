@@ -9,8 +9,7 @@ export const selectedChannelAtom = atom<ChannelEntity | null>(null);
 
 export default function ChannelStack(props: StackProps) {
   const { channels: ownedChannels } = useOwnChannels();
-  const { channels: communalChannels } = useCommunalChannels();
-
+  const { memberOfChannels } = useCommunalChannels();
   return (
     <>
       <Stack {...props}>
@@ -21,10 +20,10 @@ export default function ChannelStack(props: StackProps) {
           <ChannelLink key={channel.id} channel={channel} />
         ))}
       </Stack>
-      <Stack hidden={!!communalChannels ? communalChannels.length === 0 : true} mt="md">
+      <Stack hidden={!!memberOfChannels ? memberOfChannels.length === 0 : true} mt="md">
         <Divider my="sm" />
         <Text size="sm">Member of</Text>
-        {communalChannels?.map(channel => (
+        {memberOfChannels?.map(channel => (
           <ChannelLink key={channel.id} channel={channel} />
         ))}
       </Stack>

@@ -18,13 +18,13 @@ export default function SearchChannelsModal(props: ModalProps) {
 
   const { user } = useFirebase();
 
-  const { channels, requestToggleChannelAccess } = useCommunalChannels();
+  const { searchableChannels, requestToggleChannelAccess } = useCommunalChannels();
   const filteredChannels = useMemo(
     () =>
-      channels?.filter(channel =>
+      searchableChannels?.filter(channel =>
         channel.name.toLowerCase().includes(debouncedName?.toLowerCase())
       ),
-    [channels, debouncedName]
+    [searchableChannels, debouncedName]
   );
 
   const handleRequestChannelAccess = async (id: string): Promise<void> => {
@@ -36,11 +36,6 @@ export default function SearchChannelsModal(props: ModalProps) {
         : 'Successfully requested to join channel.',
       getToastifyProps(mantineTheme)
     );
-
-    // const tempBan = doc(store!, STORE_COLLECTIONS.CHANNELS, 'n5KE8KBMG04Jbt9D6DC0');
-    // await updateDoc(tempBan, {
-    //   banned: [{ uid: user?.uid!, photoURL: user?.photoURL!, displayName: user?.displayName! }],
-    // });
   };
 
   return (
