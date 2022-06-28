@@ -1,11 +1,11 @@
+import { FieldValue } from 'firebase/firestore';
+
 export type MessageEntity = {
-  id: string;
+  id?: string;
   text: string;
   author: UserProfile;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  channelId: string;
+  createdAt?: any; // TODO: fix
 };
 
 export type ChannelPrivacy = 'private' | 'public';

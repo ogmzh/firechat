@@ -7,9 +7,5 @@ export default function ChatMessage({ message }: { message: MessageEntity }) {
   const { user } = useFirebase();
 
   const { text, createdAt } = message;
-  return (
-    <Text>{`${text} at ${
-      createdAt ? parse(String(createdAt.seconds), 't', new Date()) : new Date()
-    }`}</Text>
-  );
+  return <Text>{`${text} at ${new Date()}`}</Text>;
 }
