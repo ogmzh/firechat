@@ -2,8 +2,8 @@ import { Button, Chip, Chips, Group, Input, Modal, Tooltip } from '@mantine/core
 import { useInputState } from '@mantine/hooks';
 import { useState } from 'react';
 import { AlertCircle } from 'tabler-icons-react';
-import useOwnChannels from '../../services/firebase/useOwnChannels';
-import { ChannelPrivacy, ModalProps } from '../../shared/Types';
+import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';
+import { ChannelPrivacy, ModalProps } from '../../../shared/Types';
 
 export default function CreateChannelModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;

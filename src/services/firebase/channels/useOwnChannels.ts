@@ -1,11 +1,11 @@
 import { UserProfile } from 'firebase/auth';
 import { addDoc, collection, doc, getDoc, query, updateDoc, where } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import useFirebase from '../../providers/useFirebase';
-import { STORE_COLLECTIONS } from '../../shared/Constants';
-import { genericConverter } from '../../shared/Converters';
-import { ChannelEntity } from '../../shared/Types';
-import { authUserToProfile } from '../../shared/Utils';
+import useFirebase from '../../../providers/useFirebase';
+import { STORE_COLLECTIONS } from '../../../shared/Constants';
+import { genericConverter } from '../../../shared/Converters';
+import { ChannelEntity } from '../../../shared/Types';
+import { authUserToProfile } from '../../../shared/Utils';
 
 export default function useOwnChannels() {
   const { store, user } = useFirebase();

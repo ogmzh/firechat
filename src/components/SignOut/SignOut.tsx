@@ -2,7 +2,7 @@ import { Button } from '@mantine/core';
 import { signOut } from 'firebase/auth';
 import { useSetAtom } from 'jotai';
 import useFirebase from '../../providers/useFirebase';
-import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
+import { selectedChannelAtom } from '../../features/Channels/ChannelStack/ChannelStack';
 
 export default function SignOut() {
   const { auth } = useFirebase();

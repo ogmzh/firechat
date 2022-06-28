@@ -1,9 +1,9 @@
 import { Divider, Stack, StackProps, Text } from '@mantine/core';
 import { atom } from 'jotai';
-import useCommunalChannels from '../../services/firebase/useCommunalChannels';
-import useOwnChannels from '../../services/firebase/useOwnChannels';
-import { ChannelEntity } from '../../shared/Types';
-import ChannelLink from '../ChannelLink/ChannelLink';
+import useCommunalChannels from '../../../services/firebase/channels/useCommunalChannels';
+import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';
+import { ChannelEntity } from '../../../shared/Types';
+import ChannelLink from '../../../components/ChannelLink/ChannelLink';
 
 export const selectedChannelAtom = atom<ChannelEntity | null>(null);
 

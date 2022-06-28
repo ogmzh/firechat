@@ -5,7 +5,6 @@ import {
   Aside,
   Box,
   Burger,
-  Button,
   Group,
   Header,
   MediaQuery,
@@ -13,19 +12,20 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core';
-import { Search, SquarePlus } from 'tabler-icons-react';
-import ChannelStack, { selectedChannelAtom } from './components/ChannelStack/ChannelStack';
-import CreateChannelModal from './components/CreateChannelModal/CreateChannelModal';
-import SignIn from './components/SignIn/SignIn';
-import UserAvatar from './components/UserAvatar/UserAvatar';
-import useFirebase from './providers/useFirebase';
 import { useAtomValue } from 'jotai';
-import SearchChannelsModal from './components/SearchChannelsModal/SearchChannelsModal';
 import { ToastContainer } from 'react-toastify';
-import ChannelMembers from './components/ChannelMembers/ChannelMembers';
+import { Search, SquarePlus } from 'tabler-icons-react';
+import SignIn from './components/SignIn/SignIn';
+import SignOutUserAccordionItem from './components/SignOutAccordionItem/SignOutAccordionItem';
+import ChannelStack, { selectedChannelAtom } from './features/Channels/ChannelStack/ChannelStack';
+import CreateChannelModal from './features/Channels/CreateChannelModal/CreateChannelModal';
+import SearchChannelsModal from './features/Channels/SearchChannelsModal/SearchChannelsModal';
+import useFirebase from './providers/useFirebase';
+import ChannelOptions from './features/Channels/ChannelOptions/ChannelOptions';
+import Chatroom from './features/Chatroom/Chatroom';
+import ChannelMembers from './features/Channels/ChannelMembers/ChannelMembers';
 
 import 'react-toastify/dist/ReactToastify.css';
-import ChannelOptions from './components/ChannelOptions/ChannelOptions';
 
 export default function Shell() {
   const { user } = useFirebase();
@@ -120,7 +120,7 @@ export default function Shell() {
               <ChannelStack mt="lg" spacing="sm" />
             </Navbar.Section>
             <Navbar.Section>
-              <UserAvatar />
+              <SignOutUserAccordionItem />
             </Navbar.Section>
           </Navbar>
         }
@@ -140,9 +140,7 @@ export default function Shell() {
             <></>
           )
         }>
-        <Text>
-          {selectedChannel ? selectedChannel.name : 'Resize app to see responsive navbar in action'}
-        </Text>
+        {selectedChannel ? <Chatroom selectedChannel={selectedChannel} /> : null}
       </AppShell>
     </>
   );

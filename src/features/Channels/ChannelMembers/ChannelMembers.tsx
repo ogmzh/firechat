@@ -2,9 +2,10 @@ import { Stack, Text, useMantineTheme } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { ArrowBackUp, Ban, Checkbox, SquareRotatedOff, SquareX } from 'tabler-icons-react';
-import useFirebase from '../../providers/useFirebase';
-import { ChannelEntity, UserProfile } from '../../shared/Types';
+import useFirebase from '../../../providers/useFirebase';
+import { ChannelEntity, UserProfile } from '../../../shared/Types';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
+
 import ChannelMember from './ChannelMember/ChannelMember';
 import BanUserModal from './modals/BanUserModal/BanUserModal';
 import ConfirmUserPermissionModal from './modals/ConfirmUserPermissionModal/ConfirmUserPermissionModal';

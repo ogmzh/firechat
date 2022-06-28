@@ -2,7 +2,7 @@ import { Accordion, Avatar, Box, Grid, Group, Text, useMantineTheme } from '@man
 import useFirebase from '../../providers/useFirebase';
 import SignOut from '../SignOut/SignOut';
 
-export default function UserAvatar() {
+export default function SignOutUserAccordionItem() {
   const theme = useMantineTheme();
   const { user } = useFirebase();
 

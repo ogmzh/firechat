@@ -1,17 +1,18 @@
 import { Text } from '@mantine/core';
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
-import useOwnChannels from '../../../../services/firebase/useOwnChannels';
-import { ModalProps } from '../../../../shared/Types';
+import useOwnChannels from '../../../../../services/firebase/channels/useOwnChannels';
+import { ModalProps } from '../../../../../shared/Types';
 import { selectedChannelAtom } from '../../../ChannelStack/ChannelStack';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
 
-export default function UnbanUserModal(
+export default function DeclineUserPermissionModal(
   props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps
 ) {
-  const { user, channel, setIsModalOpen } = props;
-  const { unbanUserFromChannel } = useOwnChannels();
+  const { channel, user, setIsModalOpen } = props;
+
+  const { confirmDenyChannelPermissionRequest } = useOwnChannels();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,19 +20,20 @@ export default function UnbanUserModal(
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    await unbanUserFromChannel(user!, channel.id!);
+    await confirmDenyChannelPermissionRequest(user!, channel.id!);
 
     setSelectedChannel(previous => ({
       ...previous!,
-      banned: previous!.banned.filter(member => member.uid !== user!.uid),
-      members: [...previous!.members, user!],
+      members: previous!.members.filter(member => member.uid !== user?.uid),
+      admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
     }));
     setIsModalOpen(false);
     setIsLoading(false);
   };
+
   return (
     <ChannelControlModal
-      label="Confirm user unban"
+      label="Deny user channel admission"
       isLoading={isLoading}
       channel={channel}
       handleConfirmClick={handleConfirmClick}
@@ -39,11 +41,11 @@ export default function UnbanUserModal(
       setIsModalOpen={() => setIsModalOpen(false)}
       user={user}>
       <Text align="center">
-        Are you sure you want to unban{' '}
+        Are you sure you want to refuse{' '}
         <Text weight={600} style={{ display: 'inline' }}>
           {user?.displayName}
         </Text>{' '}
-        from your channel
+        admission to your channel
         <Text weight={600} style={{ display: 'inline' }}>
           {' '}
           {channel.name}

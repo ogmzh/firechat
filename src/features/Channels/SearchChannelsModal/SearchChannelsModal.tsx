@@ -3,10 +3,10 @@ import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { GitPullRequest } from 'tabler-icons-react';
-import useFirebase from '../../providers/useFirebase';
-import useCommunalChannels from '../../services/firebase/useCommunalChannels';
-import { getToastifyProps } from '../../shared/Constants';
-import { ModalProps } from '../../shared/Types';
+import useFirebase from '../../../providers/useFirebase';
+import useCommunalChannels from '../../../services/firebase/channels/useCommunalChannels';
+import { getToastifyProps } from '../../../shared/Constants';
+import { ModalProps } from '../../../shared/Types';
 
 export default function SearchChannelsModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;

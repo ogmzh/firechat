@@ -2,7 +2,7 @@ import { Box, Text } from '@mantine/core';
 import { useAtom } from 'jotai';
 import { FC } from 'react';
 import { ChannelEntity } from '../../shared/Types';
-import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
+import { selectedChannelAtom } from '../../features/Channels/ChannelStack/ChannelStack';
 
 const ChannelLink: FC<{ channel: ChannelEntity }> = props => {
   const [selectedChannel, setSelectedChannel] = useAtom(selectedChannelAtom);

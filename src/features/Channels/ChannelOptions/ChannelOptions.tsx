@@ -1,8 +1,8 @@
 import { Button } from '@mantine/core';
 import { useAtom } from 'jotai';
-import useFirebase from '../../providers/useFirebase';
-import useOwnChannels from '../../services/firebase/useOwnChannels';
-import { authUserToProfile } from '../../shared/Utils';
+import useFirebase from '../../../providers/useFirebase';
+import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';
+import { authUserToProfile } from '../../../shared/Utils';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 
 export default function ChannelOptions() {

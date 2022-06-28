@@ -1,6 +1,6 @@
 import { Button, Group, LoadingOverlay, Modal, Stack } from '@mantine/core';
 import { FC, ReactNode } from 'react';
-import { ModalProps } from '../../../shared/Types';
+import { ModalProps } from '../../../../shared/Types';
 import { UserPermissionProps } from '../ChannelMembers';
 
 type ControlModalProps = {

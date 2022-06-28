@@ -1,6 +1,6 @@
 import { Box, Stack, Text } from '@mantine/core';
 import { ReactNode } from 'react';
-import { UserProfile } from '../../../shared/Types';
+import { UserProfile } from '../../../../shared/Types';
 
 type ChannelMemberProps = { user: UserProfile; children: ReactNode };
 
