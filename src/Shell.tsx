@@ -90,7 +90,9 @@ export default function Shell() {
                   mr="xl"
                 />
               </MediaQuery>
-              <Text weight={700}>Firechat</Text>
+              <Text weight="bold" size="xl" color="orange">
+                Firechat
+              </Text>
             </div>
           </Header>
         }
