@@ -1,5 +1,6 @@
 import { Text } from '@mantine/core';
 import { useSetAtom } from 'jotai';
+import { useState } from 'react';
 import useOwnChannels from '../../../../services/firebase/useOwnChannels';
 import { ModalProps } from '../../../../shared/Types';
 import { selectedChannelAtom } from '../../../ChannelStack/ChannelStack';
@@ -12,9 +13,12 @@ export default function UnbanUserModal(
   const { user, channel, setIsModalOpen } = props;
   const { unbanUserFromChannel } = useOwnChannels();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const setSelectedChannel = useSetAtom(selectedChannelAtom);
 
   const handleConfirmClick = async () => {
+    setIsLoading(true);
     await unbanUserFromChannel(user!, channel.id!);
 
     setSelectedChannel(previous => ({
@@ -23,10 +27,12 @@ export default function UnbanUserModal(
       members: [...previous!.members, user!],
     }));
     setIsModalOpen(false);
+    setIsLoading(false);
   };
   return (
     <ChannelControlModal
       label="Confirm user unban"
+      isLoading={isLoading}
       channel={channel}
       handleConfirmClick={handleConfirmClick}
       isModalOpen={!!user}
