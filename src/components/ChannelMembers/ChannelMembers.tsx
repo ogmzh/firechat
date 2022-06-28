@@ -6,11 +6,11 @@ import useFirebase from '../../providers/useFirebase';
 import { ChannelEntity, UserProfile } from '../../shared/Types';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 import ChannelMember from './ChannelMember/ChannelMember';
-import BanUserModal from './modals/BanUserModal';
-import ConfirmUserPermissionModal from './modals/ConfirmUserPermissionModal';
-import DeclineUserPermissionModal from './modals/DeclineUserPermissionModal';
-import KickUserModal from './modals/KickUserModal';
-import UnbanUserModal from './modals/UnbanUserModal';
+import BanUserModal from './modals/BanUserModal/BanUserModal';
+import ConfirmUserPermissionModal from './modals/ConfirmUserPermissionModal/ConfirmUserPermissionModal';
+import DeclineUserPermissionModal from './modals/DeclineUserPermissionModal/DeclineUserPermissionModal';
+import KickUserModal from './modals/KickUserModal/KickUserModal';
+import UnbanUserModal from './modals/UnbanUserModal/UnbanUserModal';
 
 export type UserPermissionProps = {
   user: UserProfile | null;
