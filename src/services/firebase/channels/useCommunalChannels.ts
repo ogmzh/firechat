@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  collectionGroup,
   deleteDoc,
   doc,
   getDoc,
@@ -24,6 +25,11 @@ export default function useCommunalChannels() {
   );
   const q = query(channelsRef, where('admin.uid', '!=', user?.uid));
   const [channels] = useCollectionData<ChannelEntity>(q);
+
+  const channelsMembersRef = collectionGroup(store!, STORE_COLLECTIONS.CHANNELS.MEMBERS);
+  const q2 = query(channelsMembersRef, where('uid', '==', user?.uid!));
+  const [stuff] = useCollectionData(q2);
+  console.log({ stuff });
 
   // returns true if the user had already submitted a request to join
   // and `this` request was a request to cancel the admission request

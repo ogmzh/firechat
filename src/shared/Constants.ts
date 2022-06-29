@@ -8,6 +8,10 @@ export const STORE_COLLECTIONS = {
     MEMBERS: 'members',
     BANS: 'bans',
   },
+  USERS: {
+    ROOT: 'users',
+    CHANNELS: 'channels',
+  },
   MESSAGES: 'messages',
 };
 
