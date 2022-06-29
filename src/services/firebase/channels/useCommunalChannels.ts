@@ -29,8 +29,7 @@ export default function useCommunalChannels() {
   const channelsMembersRef = collectionGroup(store!, STORE_COLLECTIONS.CHANNELS.MEMBERS);
   const q2 = query(channelsMembersRef, where('uid', '==', user?.uid!));
   const [stuff] = useCollectionData(q2);
-  console.log({ stuff });
-
+  console.log({ stuff }); //should read parents
   // returns true if the user had already submitted a request to join
   // and `this` request was a request to cancel the admission request
   const requestToggleChannelAccess = async (id: string): Promise<boolean> => {
