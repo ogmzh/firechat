@@ -16,32 +16,30 @@ export default function useCommunalChannels() {
   const [channels] = useCollectionData<ChannelEntity>(q);
 
   // returns true if the user had already submitted a request to join
-  // and `this` request was a request to cancel the admission request
-  const requestToggleChannelAccess = async (id: string): Promise<boolean> => {
+  // and `this` request was a request to cancel the admission request  Promise<boolean>
+  const requestToggleChannelAccess = async (id: string) => {
     const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, id);
     const channelRef = await getDoc(channelSnapshot);
     const channelEntity = channelRef.data() as ChannelEntity;
-    const existingAdmissionRequest = channelEntity.admissionRequests?.some(
-      existingUser => existingUser?.uid === user?.uid
-    );
-    await updateDoc(channelSnapshot, {
-      admissionRequests: existingAdmissionRequest
-        ? channelEntity.admissionRequests.filter(existingUser => existingUser.uid !== user?.uid)
-        : [...channelEntity.admissionRequests, authUserToProfile(user!)],
-    });
+    // const existingAdmissionRequest = channelEntity.admissionRequests?.some(
+    //   existingUser => existingUser?.uid === user?.uid
+    // );
+    // await updateDoc(channelSnapshot, {
+    //   admissionRequests: existingAdmissionRequest
+    //     ? channelEntity.admissionRequests.filter(existingUser => existingUser.uid !== user?.uid)
+    //     : [...channelEntity.admissionRequests, authUserToProfile(user!)],
+    // });
 
-    return existingAdmissionRequest;
+    // return existingAdmissionRequest;
   };
 
   return {
     requestToggleChannelAccess,
-    searchableChannels: channels
-      ?.filter(channel => channel.privacy === 'public')
-      .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
-      .filter(channel => !channel.members.some(existingUser => existingUser.uid === user?.uid)),
-    memberOfChannels: channels
-      ?.filter(channel => channel.privacy === 'public')
-      .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid))
-      .filter(channel => channel.members.some(existingUser => existingUser.uid === user?.uid)),
+    searchableChannels: channels?.filter(channel => channel.privacy === 'public'),
+    // .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid)),
+    // .filter(channel => !channel.members.some(existingUser => existingUser.uid === user?.uid)),
+    memberOfChannels: channels?.filter(channel => channel.privacy === 'public'),
+    // .filter(channel => !channel.banned.some(bannedUser => bannedUser.uid === user?.uid)),
+    // .filter(channel => channel.members.some(existingUser => existingUser.uid === user?.uid)),
   };
 }

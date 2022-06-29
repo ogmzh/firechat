@@ -8,19 +8,19 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
   const [messageInput, setMessageInput] = useInputState('');
   const scrollToRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage } = useMessages(selectedChannel.id!);
+  // const { messages, sendMessage } = useMessages(selectedChannel.id!);
 
   const handleSendMessage = async () => {
-    await sendMessage(messageInput);
+    // await sendMessage(messageInput);
     setMessageInput('');
     scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   return (
     <Stack style={{ height: '100%', justifyContent: 'space-between' }}>
       <Stack>
-        {messages?.map(message => (
+        {/* {messages?.map(message => (
           <Text key={message.id}>{message.text}</Text>
-        ))}
+        ))} */}
       </Stack>
       <Stack>
         <Group style={{ marginBottom: '-10px' }}>

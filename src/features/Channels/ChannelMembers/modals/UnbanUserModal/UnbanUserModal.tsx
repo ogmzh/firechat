@@ -23,8 +23,8 @@ export default function UnbanUserModal(
 
     setSelectedChannel(previous => ({
       ...previous!,
-      banned: previous!.banned.filter(member => member.uid !== user!.uid),
-      members: [...previous!.members, user!],
+      // banned: previous!.banned.filter(member => member.uid !== user!.uid),
+      // members: [...previous!.members, user!],
     }));
     setIsModalOpen(false);
     setIsLoading(false);

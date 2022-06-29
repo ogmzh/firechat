@@ -30,12 +30,12 @@ export default function SearchChannelsModal(props: ModalProps) {
   const handleRequestChannelAccess = async (id: string): Promise<void> => {
     const previousAdmissionRequestCancelled = await requestToggleChannelAccess(id);
 
-    toast[previousAdmissionRequestCancelled ? 'info' : 'success'](
-      previousAdmissionRequestCancelled
-        ? 'Cancelled your join channel request.'
-        : 'Successfully requested to join channel.',
-      getToastifyProps(mantineTheme)
-    );
+    // toast[previousAdmissionRequestCancelled ? 'info' : 'success'](
+    //   previousAdmissionRequestCancelled
+    //     ? 'Cancelled your join channel request.'
+    //     : 'Successfully requested to join channel.',
+    //   getToastifyProps(mantineTheme)
+    // );
   };
 
   return (
@@ -80,7 +80,7 @@ export default function SearchChannelsModal(props: ModalProps) {
                   {channel.name}
                 </Text>
               </div>
-              <GitPullRequest
+              {/* <GitPullRequest
                 size={28}
                 cursor="pointer"
                 color={
@@ -89,7 +89,7 @@ export default function SearchChannelsModal(props: ModalProps) {
                     : 'cyan'
                 }
                 onClick={() => handleRequestChannelAccess(channel.id!)}
-              />
+              /> */}
             </Box>
           ))}
         </Stack>

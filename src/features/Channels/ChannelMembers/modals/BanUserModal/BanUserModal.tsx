@@ -20,8 +20,8 @@ export default function BanUserModal(props: Omit<ModalProps, 'isModalOpen'> & Us
 
     setSelectedChannel(previous => ({
       ...previous!,
-      members: previous!.members.filter(member => member.uid !== user!.uid),
-      banned: [...previous!.banned, user!],
+      // members: previous!.members.filter(member => member.uid !== user!.uid),
+      // banned: [...previous!.banned, user!],
     }));
     setIsModalOpen(false);
     setIsLoading(false);

@@ -17,10 +17,6 @@ export default function CreateChannelModal(props: ModalProps) {
     createChannel({
       name,
       privacy,
-      members: [],
-      banned: [],
-      messages: [],
-      admissionRequests: [],
     });
     setName('');
     setIsModalOpen(false);

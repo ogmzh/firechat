@@ -21,7 +21,7 @@ export default function KickUserModal(
 
     setSelectedChannel(previous => ({
       ...previous!,
-      members: previous!.members.filter(member => member.uid !== user!.uid),
+      // members: previous!.members.filter(member => member.uid !== user!.uid),
     }));
     setIsModalOpen(false);
     setIsLoading(false);

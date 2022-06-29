@@ -42,7 +42,7 @@ export default function ChannelMembers() {
             setIsModalOpen={() => setDeclineUser(null)}
           />
 
-          {selectedChannel?.admissionRequests.map(user => (
+          {/* {selectedChannel?.admissionRequests.map(user => (
             <div key={user.uid}>
               <Text mb="md">Member Requests</Text>
               <ChannelMember user={user}>
@@ -63,16 +63,16 @@ export default function ChannelMembers() {
                 </div>
               </ChannelMember>
             </div>
-          ))}
+          ))} */}
         </>
       )}
-      <Text hidden={selectedChannel?.members.length === 0}>Channel members</Text>
+      {/* <Text hidden={selectedChannel?.members.length === 0}>Channel members</Text> */}
       {selectedChannel?.admin.uid !== user?.uid && (
         <ChannelMember user={selectedChannel!.admin}>
           <Text weight={200}>Admin</Text>
         </ChannelMember>
       )}
-      {selectedChannel?.members
+      {/* {selectedChannel?.members
         .filter(member => member.uid !== user?.uid)
         .map(member => (
           <div key={member.uid}>
@@ -108,8 +108,8 @@ export default function ChannelMembers() {
               )}
             </ChannelMember>
           </div>
-        ))}
-      {user?.uid === selectedChannel?.admin.uid &&
+        ))} */}
+      {/* {user?.uid === selectedChannel?.admin.uid &&
         selectedChannel?.banned &&
         selectedChannel?.banned.length > 0 && (
           <>
@@ -132,7 +132,7 @@ export default function ChannelMembers() {
               </div>
             ))}
           </>
-        )}
+        )} */}
     </Stack>
   );
 }

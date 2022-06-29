@@ -1,5 +1,3 @@
-import { FieldValue } from 'firebase/firestore';
-
 export type MessageEntity = {
   id?: string;
   text: string;
@@ -17,10 +15,6 @@ export type ChannelEntity = {
   name: string;
   admin: UserProfile;
   privacy: ChannelPrivacy;
-  members: UserProfile[];
-  banned: UserProfile[];
-  messages: MessageEntity[];
-  admissionRequests: UserProfile[];
 };
 
 export type ModalProps = {

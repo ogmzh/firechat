@@ -36,8 +36,8 @@ export default function useOwnChannels() {
     const channelEntity = channelRef.data() as ChannelEntity;
 
     await updateDoc(channelSnapshot, {
-      members: channelEntity.members.filter(member => member.uid !== bannedUser.uid),
-      banned: [...channelEntity.banned, bannedUser],
+      // members: channelEntity.members.filter(member => member.uid !== bannedUser.uid),
+      // banned: [...channelEntity.banned, bannedUser],
     });
   };
 
@@ -47,8 +47,8 @@ export default function useOwnChannels() {
     const channelEntity = channelRef.data() as ChannelEntity;
 
     await updateDoc(channelSnapshot, {
-      members: [...channelEntity.members, bannedUser],
-      banned: channelEntity.banned.filter(member => member.uid !== bannedUser.uid),
+      // members: [...channelEntity.members, bannedUser],
+      // banned: channelEntity.banned.filter(member => member.uid !== bannedUser.uid),
     });
   };
 
@@ -69,11 +69,11 @@ export default function useOwnChannels() {
 
   const kickUserFromChannel = async (kickedUser: UserProfile, channelId: string) => {
     const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, channelId);
-    const channelRef = await getDoc(channelSnapshot);
-    const channelEntity = channelRef.data() as ChannelEntity;
+    // const channelRef = await getDoc(channelSnapshot);
+    // const channelEntity = channelRef.data() as ChannelEntity;
 
     await updateDoc(channelSnapshot, {
-      members: channelEntity.members.filter(member => member.uid !== kickedUser.uid),
+      // members: channelEntity.members.filter(member => member.uid !== kickedUser.uid),
     });
   };
 
@@ -81,11 +81,11 @@ export default function useOwnChannels() {
     const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS, channelId);
     const channelRef = await getDoc(channelSnapshot);
     const channelEntity = channelRef.data() as ChannelEntity;
-    await updateDoc(channelSnapshot, {
-      admissionRequests: channelEntity.admissionRequests.filter(
-        request => request.uid !== newUser?.uid
-      ),
-    });
+    // await updateDoc(channelSnapshot, {
+    //   admissionRequests: channelEntity.admissionRequests.filter(
+    //     request => request.uid !== newUser?.uid
+    //   ),
+    // });
   };
 
   return {

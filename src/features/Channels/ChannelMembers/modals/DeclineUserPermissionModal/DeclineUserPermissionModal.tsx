@@ -24,8 +24,8 @@ export default function DeclineUserPermissionModal(
 
     setSelectedChannel(previous => ({
       ...previous!,
-      members: previous!.members.filter(member => member.uid !== user?.uid),
-      admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
+      // members: previous!.members.filter(member => member.uid !== user?.uid),
+      // admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
     }));
     setIsModalOpen(false);
     setIsLoading(false);

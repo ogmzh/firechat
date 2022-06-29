@@ -22,8 +22,8 @@ export default function ConfirmUserPermissionModal(
 
     setSelectedChannel(previous => ({
       ...previous!,
-      members: [...previous!.members, user!],
-      admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
+      // members: [...previous!.members, user!],
+      // admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
     }));
     setIsModalOpen(false);
     setIsLoading(false);
