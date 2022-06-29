@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { ArrowBackUp, Ban, Checkbox, SquareRotatedOff, SquareX } from 'tabler-icons-react';
 import useFirebase from '../../../providers/useFirebase';
+import { useOwnChannel } from '../../../services/firebase/channels/useOwnChannels';
 import { ChannelEntity, UserProfile } from '../../../shared/Types';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 
@@ -27,6 +28,9 @@ export default function ChannelMembers() {
   const selectedChannel = useAtomValue(selectedChannelAtom);
   const mantineTheme = useMantineTheme();
   const { user } = useFirebase();
+
+  const { admissionRequests, members, bannedUsers } = useOwnChannel(selectedChannel?.id!);
+
   return (
     <Stack>
       {user?.uid === selectedChannel?.admin.uid && (
@@ -42,9 +46,9 @@ export default function ChannelMembers() {
             setIsModalOpen={() => setDeclineUser(null)}
           />
 
-          {/* {selectedChannel?.admissionRequests.map(user => (
+          <Text mb="md">Member Requests</Text>
+          {admissionRequests?.map(user => (
             <div key={user.uid}>
-              <Text mb="md">Member Requests</Text>
               <ChannelMember user={user}>
                 <div>
                   <Checkbox
@@ -63,55 +67,49 @@ export default function ChannelMembers() {
                 </div>
               </ChannelMember>
             </div>
-          ))} */}
+          ))}
         </>
       )}
-      {/* <Text hidden={selectedChannel?.members.length === 0}>Channel members</Text> */}
+      <Text hidden={!members || members.length === 0}>Channel members</Text>
       {selectedChannel?.admin.uid !== user?.uid && (
         <ChannelMember user={selectedChannel!.admin}>
           <Text weight={200}>Admin</Text>
         </ChannelMember>
       )}
-      {/* {selectedChannel?.members
-        .filter(member => member.uid !== user?.uid)
-        .map(member => (
-          <div key={member.uid}>
-            <ChannelMember user={member}>
-              {selectedChannel.admin.uid === user?.uid && (
-                <>
-                  <BanUserModal
-                    channel={selectedChannel}
-                    setIsModalOpen={() => setBanUser(null)}
-                    user={banUser}
+      {members?.map(member => (
+        <div key={member.uid}>
+          <ChannelMember user={member}>
+            {selectedChannel && selectedChannel.admin.uid === user?.uid && (
+              <>
+                <BanUserModal
+                  channel={selectedChannel}
+                  setIsModalOpen={() => setBanUser(null)}
+                  user={banUser}
+                />
+                <KickUserModal
+                  channel={selectedChannel}
+                  setIsModalOpen={() => setKickUser(null)}
+                  user={kickUser}
+                />
+                <div>
+                  <SquareRotatedOff
+                    style={{ marginRight: mantineTheme.spacing.xs }}
+                    size={28}
+                    color="orange"
+                    cursor="pointer"
+                    onClick={() => setKickUser(member)}
                   />
-                  <KickUserModal
-                    channel={selectedChannel}
-                    setIsModalOpen={() => setKickUser(null)}
-                    user={kickUser}
-                  />
-                  <div>
-                    <SquareRotatedOff
-                      style={{ marginRight: mantineTheme.spacing.xs }}
-                      size={28}
-                      color="orange"
-                      cursor="pointer"
-                      onClick={() => setKickUser(member)}
-                    />
-                    <Ban
-                      size={28}
-                      color="red"
-                      cursor="pointer"
-                      onClick={() => setBanUser(member)}
-                    />
-                  </div>
-                </>
-              )}
-            </ChannelMember>
-          </div>
-        ))} */}
-      {/* {user?.uid === selectedChannel?.admin.uid &&
-        selectedChannel?.banned &&
-        selectedChannel?.banned.length > 0 && (
+                  <Ban size={28} color="red" cursor="pointer" onClick={() => setBanUser(member)} />
+                </div>
+              </>
+            )}
+          </ChannelMember>
+        </div>
+      ))}
+      {selectedChannel &&
+        user?.uid === selectedChannel?.admin.uid &&
+        bannedUsers &&
+        bannedUsers.length > 0 && (
           <>
             <UnbanUserModal
               channel={selectedChannel}
@@ -119,7 +117,7 @@ export default function ChannelMembers() {
               user={unbanUser}
             />
             <Text>Banned users</Text>
-            {selectedChannel?.banned.map(member => (
+            {bannedUsers.map(member => (
               <div key={member.uid}>
                 <ChannelMember user={member}>
                   <ArrowBackUp
@@ -132,7 +130,7 @@ export default function ChannelMembers() {
               </div>
             ))}
           </>
-        )} */}
+        )}
     </Stack>
   );
 }

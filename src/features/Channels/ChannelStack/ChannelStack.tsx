@@ -23,9 +23,9 @@ export default function ChannelStack(props: StackProps) {
       <Stack hidden={!!memberOfChannels ? memberOfChannels.length === 0 : true} mt="md">
         <Divider my="sm" />
         <Text size="sm">Member of</Text>
-        {memberOfChannels?.map(channel => (
+        {/* {memberOfChannels?.map(channel => (
           <ChannelLink key={channel.id} channel={channel} />
-        ))}
+        ))} */}
       </Stack>
     </>
   );

@@ -1,18 +1,18 @@
 import { Button } from '@mantine/core';
 import { useAtom } from 'jotai';
 import useFirebase from '../../../providers/useFirebase';
-import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';
+import { useOwnChannel } from '../../../services/firebase/channels/useOwnChannels';
 import { authUserToProfile } from '../../../shared/Utils';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 
 export default function ChannelOptions() {
   const [selectedChannel, setSelectedChannel] = useAtom(selectedChannelAtom);
   const { user } = useFirebase();
-  const { kickUserFromChannel } = useOwnChannels();
+  const { kickUserFromChannel } = useOwnChannel(selectedChannel?.id!);
 
   const handleLeaveChannel = async () => {
     setSelectedChannel(null);
-    await kickUserFromChannel(authUserToProfile(user!), selectedChannel?.id!);
+    await kickUserFromChannel(authUserToProfile(user!).uid);
   };
 
   if (selectedChannel?.admin.uid === user?.uid) {

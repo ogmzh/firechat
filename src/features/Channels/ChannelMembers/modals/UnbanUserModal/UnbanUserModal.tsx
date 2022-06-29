@@ -1,9 +1,7 @@
 import { Text } from '@mantine/core';
-import { useSetAtom } from 'jotai';
 import { useState } from 'react';
-import useOwnChannels from '../../../../../services/firebase/channels/useOwnChannels';
+import { useOwnChannel } from '../../../../../services/firebase/channels/useOwnChannels';
 import { ModalProps } from '../../../../../shared/Types';
-import { selectedChannelAtom } from '../../../ChannelStack/ChannelStack';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
 
@@ -11,21 +9,14 @@ export default function UnbanUserModal(
   props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps
 ) {
   const { user, channel, setIsModalOpen } = props;
-  const { unbanUserFromChannel } = useOwnChannels();
+  const { unbanUserFromChannel } = useOwnChannel(channel.id!);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const setSelectedChannel = useSetAtom(selectedChannelAtom);
-
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    await unbanUserFromChannel(user!, channel.id!);
+    await unbanUserFromChannel(user!);
 
-    setSelectedChannel(previous => ({
-      ...previous!,
-      // banned: previous!.banned.filter(member => member.uid !== user!.uid),
-      // members: [...previous!.members, user!],
-    }));
     setIsModalOpen(false);
     setIsLoading(false);
   };

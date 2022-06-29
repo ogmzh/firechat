@@ -1,9 +1,7 @@
 import { Text } from '@mantine/core';
-import { useSetAtom } from 'jotai';
 import { useState } from 'react';
-import useOwnChannels from '../../../../../services/firebase/channels/useOwnChannels';
+import { useOwnChannel } from '../../../../../services/firebase/channels/useOwnChannels';
 import { ModalProps } from '../../../../../shared/Types';
-import { selectedChannelAtom } from '../../../ChannelStack/ChannelStack';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
 
@@ -12,19 +10,13 @@ export default function ConfirmUserPermissionModal(
 ) {
   const { channel, user, setIsModalOpen } = props;
 
-  const { confirmChannelPermissionRequest } = useOwnChannels();
+  const { confirmChannelPermissionRequest } = useOwnChannel(channel.id!);
   const [isLoading, setIsLoading] = useState(false);
-  const setSelectedChannel = useSetAtom(selectedChannelAtom);
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    await confirmChannelPermissionRequest(user!, channel.id!);
+    await confirmChannelPermissionRequest(user!);
 
-    setSelectedChannel(previous => ({
-      ...previous!,
-      // members: [...previous!.members, user!],
-      // admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
-    }));
     setIsModalOpen(false);
     setIsLoading(false);
   };

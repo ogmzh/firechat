@@ -80,16 +80,16 @@ export default function SearchChannelsModal(props: ModalProps) {
                   {channel.name}
                 </Text>
               </div>
-              {/* <GitPullRequest
+              <GitPullRequest
                 size={28}
                 cursor="pointer"
-                color={
-                  channel.admissionRequests?.some(existingUser => existingUser?.uid === user?.uid)
-                    ? 'lime'
-                    : 'cyan'
-                }
+                // color={
+                // channel.admissionRequests?.some(existingUser => existingUser?.uid === user?.uid)
+                //   ? 'lime'
+                //   : 'cyan'
+                // }
                 onClick={() => handleRequestChannelAccess(channel.id!)}
-              /> */}
+              />
             </Box>
           ))}
         </Stack>

@@ -2,7 +2,12 @@ import { MantineTheme } from '@mantine/core';
 import { ToastOptions } from 'react-toastify';
 
 export const STORE_COLLECTIONS = {
-  CHANNELS: 'channels',
+  CHANNELS: {
+    ROOT: 'channels',
+    ADMISSION_REQUESTS: 'requests',
+    MEMBERS: 'members',
+    BANS: 'bans',
+  },
   MESSAGES: 'messages',
 };
 
