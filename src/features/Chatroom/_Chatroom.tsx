@@ -13,7 +13,7 @@ import ChatMessage from './ChatMessage/ChatMessage';
 const _Chatroom = () => {
   const { store, user } = useFirebase();
 
-  const messagesRef = collection(store!, STORE_COLLECTIONS.MESSAGES).withConverter(
+  const messagesRef = collection(store!, STORE_COLLECTIONS.CHANNELS.MESSAGES).withConverter(
     genericConverter
   );
   const q = query(messagesRef, orderBy('createdAt'));

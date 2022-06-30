@@ -1,9 +1,10 @@
 export type MessageEntity = {
   id?: string;
   text: string;
-  author: UserProfile;
+  recipient?: UserProfile;
+  author?: UserProfile;
   channelId: string;
-  createdAt?: any; // TODO: fix
+  createdAt?: Date | string;
 };
 
 export type ChannelPrivacy = 'private' | 'public';
@@ -30,3 +31,5 @@ export type ModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
 };
+
+export type ChatType = 'public' | 'private' | '1-on-1' | 'announcements';

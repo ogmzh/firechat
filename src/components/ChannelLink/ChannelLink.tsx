@@ -21,6 +21,7 @@ const ChannelLink: FC<{ channel: ChannelEntity }> = props => {
       sx={theme => ({
         backgroundColor:
           selectedChannel?.id === channel.id ? theme.colors.dark[4] : theme.colors.dark[6],
+
         textAlign: 'center',
         padding: theme.spacing.xs,
         borderRadius: theme.radius.sm,
@@ -29,7 +30,11 @@ const ChannelLink: FC<{ channel: ChannelEntity }> = props => {
           backgroundColor: theme.colors.dark[5],
         },
       })}>
-      <Text lineClamp={1} title={channel.name}>
+      <Text
+        lineClamp={1}
+        title={channel.name}
+        weight={selectedChannel?.id === channel.id ? 'bold' : 'regular'}
+        color={selectedChannel?.id === channel.id ? 'orange' : 'inherit'}>
         {channel.name}
       </Text>
     </Box>

@@ -7,12 +7,13 @@ export const STORE_COLLECTIONS = {
     ADMISSION_REQUESTS: 'requests',
     MEMBERS: 'members',
     BANS: 'bans',
+    MESSAGES: 'messages',
+    CHAT_ROOM: 'chatroom',
   },
   USERS: {
     ROOT: 'users',
     CHANNELS: 'channels',
   },
-  MESSAGES: 'messages',
 };
 
 export const getToastifyProps = (mantineTheme: MantineTheme): ToastOptions => ({
