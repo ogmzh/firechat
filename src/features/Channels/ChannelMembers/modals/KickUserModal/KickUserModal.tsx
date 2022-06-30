@@ -1,6 +1,7 @@
 import { Text } from '@mantine/core';
 import { useState } from 'react';
 import { useOwnChannel } from '../../../../../services/firebase/channels/useOwnChannels';
+import useUserManagement from '../../../../../services/firebase/users/useUserManagement';
 import { ModalProps } from '../../../../../shared/Types';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
@@ -11,11 +12,11 @@ export default function KickUserModal(
   const { channel, user, setIsModalOpen } = props;
   const [isLoading, setIsLoading] = useState(false);
   const { kickUserFromChannel } = useOwnChannel(channel!);
-
+  const { removeChannelFromUser } = useUserManagement();
   const handleConfirmClick = async () => {
     setIsLoading(true);
     await kickUserFromChannel(user?.uid!);
-
+    await removeChannelFromUser(user!, channel);
     setIsModalOpen(false);
     setIsLoading(false);
   };
