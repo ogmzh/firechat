@@ -1,6 +1,6 @@
 import { Box, Input, Modal, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
-import { differenceBy } from 'lodash-es';
+import { debounce, differenceBy } from 'lodash-es';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { GitPullRequest } from 'tabler-icons-react';
@@ -21,16 +21,23 @@ export default function SearchChannelsModal(props: ModalProps) {
   const { user } = useFirebase();
 
   const { publicChannels, requestToggleChannelAccess } = useCommunalChannels();
-  const { channels, admissionRequests, requestToggleUserAccess } = useUser(user?.uid!);
+  const { channels, admissionRequests, bannedChannels, requestToggleUserAccess } = useUser(
+    user?.uid!
+  );
 
-  const searchableChannels = differenceBy(publicChannels, channels, 'id');
-  // const filteredChannels = useMemo(
-  //   () =>
-  //     searchableChannels?.filter(channel =>
-  //       channel.name.toLowerCase().includes(debouncedName?.toLowerCase())
-  //     ),
-  //   [searchableChannels, debouncedName]
-  // );
+  const searchableChannels = useMemo(() => {
+    const nonJoinedPublicChannels = differenceBy(
+      publicChannels,
+      [...(channels ?? []), ...(bannedChannels ?? [])],
+      'id'
+    );
+
+    return debouncedName
+      ? nonJoinedPublicChannels.filter(channel =>
+          channel.name.toLowerCase().includes(debouncedName.toLowerCase())
+        )
+      : nonJoinedPublicChannels;
+  }, [channels, publicChannels, bannedChannels, debouncedName]);
 
   const handleRequestChannelAccess = async (channel: ChannelEntity): Promise<void> => {
     requestToggleUserAccess(channel);

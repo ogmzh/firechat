@@ -33,7 +33,7 @@ export const useUser = (uid: string) => {
           ...existingUserProfile,
           admissionRequests: [
             ...(existingUserProfile.admissionRequests ?? []),
-            omit(channel, 'admin'),
+            omit(channel, ['admin', 'createdAt']),
           ],
         }));
   };
@@ -41,6 +41,7 @@ export const useUser = (uid: string) => {
   return {
     channels: userDocument?.channels as ChannelEntity[],
     admissionRequests: userDocument?.admissionRequests as ChannelEntity[],
+    bannedChannels: userDocument?.bans as ChannelEntity[],
     requestToggleUserAccess,
   };
 };

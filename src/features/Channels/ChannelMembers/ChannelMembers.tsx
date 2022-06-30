@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { ArrowBackUp, Ban, Checkbox, SquareRotatedOff, SquareX } from 'tabler-icons-react';
 import useFirebase from '../../../providers/useFirebase';
 import { useOwnChannel } from '../../../services/firebase/channels/useOwnChannels';
-import { useUser } from '../../../services/firebase/users/useUserManagement';
 import { ChannelEntity, UserProfile } from '../../../shared/Types';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 
@@ -47,7 +46,9 @@ export default function ChannelMembers() {
             setIsModalOpen={() => setDeclineUser(null)}
           />
 
-          <Text mb="md">Member Requests</Text>
+          <Text mb="md" hidden={!admissionRequests || admissionRequests.length === 0}>
+            Member Requests
+          </Text>
           {admissionRequests?.map(user => (
             <div key={user.uid}>
               <ChannelMember user={user}>
