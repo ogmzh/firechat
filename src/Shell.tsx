@@ -102,7 +102,7 @@ export default function Shell() {
             hiddenBreakpoint="sm"
             hidden={!isSidebarOpened}
             width={{ sm: 200, lg: 300 }}>
-            <Navbar.Section grow mt="xs">
+            <Navbar.Section grow mt="xs" style={{ overflow: 'auto' }} mb="xs">
               <Group sx={{ justifyContent: 'space-between' }}>
                 <Text>Channels</Text>
                 <div>

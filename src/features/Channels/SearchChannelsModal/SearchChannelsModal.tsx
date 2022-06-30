@@ -1,6 +1,6 @@
 import { Box, Input, Modal, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
-import { debounce, differenceBy } from 'lodash-es';
+import { differenceBy } from 'lodash-es';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { GitPullRequest } from 'tabler-icons-react';
