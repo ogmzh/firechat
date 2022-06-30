@@ -1,6 +1,7 @@
-import { Button, Group, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
+import { Avatar, Button, Group, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
 import { getHotkeyHandler, useInputState } from '@mantine/hooks';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import useFirebase from '../../providers/useFirebase';
 import useMessages from '../../services/firebase/messages/useMessages';
 import { ChannelEntity, ChatType } from '../../shared/Types';
 
@@ -11,12 +12,16 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
   const scrollToRef = useRef<HTMLDivElement>(null);
 
   const { messages, sendMessage } = useMessages(selectedChannel.id!, selectedTab);
-
+  const { user } = useFirebase();
   const handleSendMessage = async () => {
     await sendMessage(messageInput);
     setMessageInput('');
-    scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <Stack style={{ height: '100%', justifyContent: 'space-between' }}>
       <Group>
@@ -36,7 +41,24 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
       </Group>
       <Stack>
         {messages?.map(message => (
-          <Text key={message.id}>{message.text}</Text>
+          <Group
+            key={message.id}
+            align="flex-end"
+            style={{
+              flexDirection: `${message.author?.uid === user?.uid ? 'row-reverse' : 'row'}`,
+            }}>
+            <Avatar src={message.author?.photoURL ?? ''} radius="xl" />
+            <Text
+              sx={theme => ({
+                flex: 0.75,
+                padding: theme.spacing.xl,
+                borderRadius: theme.spacing.sm,
+                backgroundColor:
+                  message.author?.uid === user?.uid ? theme.colors.dark[6] : theme.colors.dark[7],
+              })}>
+              {message.text}
+            </Text>
+          </Group>
         ))}
       </Stack>
       <Stack>
