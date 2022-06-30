@@ -33,7 +33,7 @@ export default function ChannelMembers() {
 
   return (
     <Stack>
-      {user?.uid === selectedChannel?.admin.uid && (
+      {user?.uid === selectedChannel?.admin?.uid && (
         <>
           <ConfirmUserPermissionModal
             channel={selectedChannel!}

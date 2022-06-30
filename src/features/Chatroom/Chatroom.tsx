@@ -23,7 +23,7 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
         ))} */}
       </Stack>
       <Stack>
-        <Group style={{ marginBottom: '-10px' }}>
+        {/* <Group style={{ marginBottom: '-10px' }}>
           <TextInput
             style={{ flex: 1 }}
             value={messageInput}
@@ -32,7 +32,7 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
           />
           <Button onClick={() => handleSendMessage()}>Send</Button>
         </Group>
-        <div ref={scrollToRef} />
+        <div ref={scrollToRef} /> */}
       </Stack>
     </Stack>
   );

@@ -3,13 +3,21 @@ import { useAtom } from 'jotai';
 import { FC } from 'react';
 import { ChannelEntity } from '../../shared/Types';
 import { selectedChannelAtom } from '../../features/Channels/ChannelStack/ChannelStack';
+import { useOwnChannel } from '../../services/firebase/channels/useOwnChannels';
 
 const ChannelLink: FC<{ channel: ChannelEntity }> = props => {
   const [selectedChannel, setSelectedChannel] = useAtom(selectedChannelAtom);
   const { channel } = props;
+
+  // fill the admin data etc from channel document
+  const { selectedChannel: selectedChannelFresh } = useOwnChannel(channel);
+
+  const handleClickLink = () => {
+    setSelectedChannel(selectedChannelFresh);
+  };
   return (
     <Box
-      onClick={() => setSelectedChannel(channel)}
+      onClick={() => handleClickLink()}
       sx={theme => ({
         backgroundColor:
           selectedChannel?.id === channel.id ? theme.colors.dark[4] : theme.colors.dark[6],

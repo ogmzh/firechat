@@ -1,21 +1,10 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { addDoc, collection, deleteDoc, doc, query, setDoc, where } from 'firebase/firestore';
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
 import useFirebase from '../../../providers/useFirebase';
 import { STORE_COLLECTIONS } from '../../../shared/Constants';
 import { genericConverter } from '../../../shared/Converters';
 import { ChannelEntity, UserProfile } from '../../../shared/Types';
 import { authUserToProfile } from '../../../shared/Utils';
-import useUserManagement from '../users/useUserManagement';
 
 export const useOwnChannel = (channel: ChannelEntity) => {
   const { id: channelId } = channel;
@@ -35,6 +24,9 @@ export const useOwnChannel = (channel: ChannelEntity) => {
 
   const bannedUsersRef = collection(channelsRef, channelId!, STORE_COLLECTIONS.CHANNELS.BANS);
 
+  const [selectedChannel] = useDocumentData(
+    doc(store!, STORE_COLLECTIONS.CHANNELS.ROOT, channelId!).withConverter(genericConverter)
+  );
   const [admissionRequests] = useCollectionData(admissionRequestsRef);
   const [members] = useCollectionData(membersRef);
   const [bannedUsers] = useCollectionData(bannedUsersRef);
@@ -126,6 +118,7 @@ export const useOwnChannel = (channel: ChannelEntity) => {
   };
 
   return {
+    selectedChannel: selectedChannel as ChannelEntity,
     admissionRequests: admissionRequests as UserProfile[],
     members: members as UserProfile[],
     bannedUsers: bannedUsers as UserProfile[],
