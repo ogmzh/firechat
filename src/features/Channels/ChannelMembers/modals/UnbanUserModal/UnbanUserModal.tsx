@@ -1,6 +1,7 @@
 import { Text } from '@mantine/core';
 import { useState } from 'react';
 import { useOwnChannel } from '../../../../../services/firebase/channels/useOwnChannels';
+import useUserManagement from '../../../../../services/firebase/users/useUserManagement';
 import { ModalProps } from '../../../../../shared/Types';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
@@ -9,14 +10,15 @@ export default function UnbanUserModal(
   props: Omit<ModalProps, 'isModalOpen'> & UserPermissionProps
 ) {
   const { user, channel, setIsModalOpen } = props;
-  const { unbanUserFromChannel } = useOwnChannel(channel.id!);
+  const { unbanUserFromChannel } = useOwnChannel(channel!);
+  const { unbanUser } = useUserManagement();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
     await unbanUserFromChannel(user!);
-
+    await unbanUser(user!, channel);
     setIsModalOpen(false);
     setIsLoading(false);
   };

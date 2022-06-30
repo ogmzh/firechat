@@ -1,12 +1,14 @@
 import { Box, Input, Modal, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
+import { differenceBy } from 'lodash-es';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { GitPullRequest } from 'tabler-icons-react';
 import useFirebase from '../../../providers/useFirebase';
 import useCommunalChannels from '../../../services/firebase/channels/useCommunalChannels';
+import { useUser } from '../../../services/firebase/users/useUserManagement';
 import { getToastifyProps } from '../../../shared/Constants';
-import { ModalProps } from '../../../shared/Types';
+import { ChannelEntity, ModalProps } from '../../../shared/Types';
 
 export default function SearchChannelsModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
@@ -18,24 +20,28 @@ export default function SearchChannelsModal(props: ModalProps) {
 
   const { user } = useFirebase();
 
-  const { searchableChannels, requestToggleChannelAccess } = useCommunalChannels();
-  const filteredChannels = useMemo(
-    () =>
-      searchableChannels?.filter(channel =>
-        channel.name.toLowerCase().includes(debouncedName?.toLowerCase())
-      ),
-    [searchableChannels, debouncedName]
-  );
+  const { publicChannels, requestToggleChannelAccess } = useCommunalChannels();
+  const { channels, admissionRequests, requestToggleUserAccess } = useUser(user?.uid!);
 
-  const handleRequestChannelAccess = async (id: string): Promise<void> => {
-    const previousAdmissionRequestCancelled = await requestToggleChannelAccess(id);
+  const searchableChannels = differenceBy(publicChannels, channels, 'id');
+  // const filteredChannels = useMemo(
+  //   () =>
+  //     searchableChannels?.filter(channel =>
+  //       channel.name.toLowerCase().includes(debouncedName?.toLowerCase())
+  //     ),
+  //   [searchableChannels, debouncedName]
+  // );
 
-    // toast[previousAdmissionRequestCancelled ? 'info' : 'success'](
-    //   previousAdmissionRequestCancelled
-    //     ? 'Cancelled your join channel request.'
-    //     : 'Successfully requested to join channel.',
-    //   getToastifyProps(mantineTheme)
-    // );
+  const handleRequestChannelAccess = async (channel: ChannelEntity): Promise<void> => {
+    requestToggleUserAccess(channel);
+    const previousAdmissionRequestCancelled = await requestToggleChannelAccess(channel.id!);
+
+    toast[previousAdmissionRequestCancelled ? 'info' : 'success'](
+      previousAdmissionRequestCancelled
+        ? 'Cancelled your join channel request.'
+        : 'Successfully requested to join channel.',
+      getToastifyProps(mantineTheme)
+    );
   };
 
   return (
@@ -65,7 +71,7 @@ export default function SearchChannelsModal(props: ModalProps) {
           onChange={setName}
         />
         <Stack spacing="xs" style={{ display: 'flex', width: '100%' }}>
-          {filteredChannels?.map(channel => (
+          {searchableChannels?.map(channel => (
             <Box
               key={channel.id}
               sx={theme => ({
@@ -83,12 +89,12 @@ export default function SearchChannelsModal(props: ModalProps) {
               <GitPullRequest
                 size={28}
                 cursor="pointer"
-                // color={
-                // channel.admissionRequests?.some(existingUser => existingUser?.uid === user?.uid)
-                //   ? 'lime'
-                //   : 'cyan'
-                // }
-                onClick={() => handleRequestChannelAccess(channel.id!)}
+                color={
+                  admissionRequests?.some(requestChannel => requestChannel.id === channel.id)
+                    ? 'lime'
+                    : 'cyan'
+                }
+                onClick={() => handleRequestChannelAccess(channel)}
               />
             </Box>
           ))}

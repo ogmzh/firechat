@@ -1,6 +1,7 @@
 import { Text } from '@mantine/core';
 import { useState } from 'react';
 import { useOwnChannel } from '../../../../../services/firebase/channels/useOwnChannels';
+import useUserManagement from '../../../../../services/firebase/users/useUserManagement';
 import { ModalProps } from '../../../../../shared/Types';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
@@ -10,12 +11,14 @@ export default function ConfirmUserPermissionModal(
 ) {
   const { channel, user, setIsModalOpen } = props;
 
-  const { confirmChannelPermissionRequest } = useOwnChannel(channel.id!);
+  const { confirmChannelPermissionRequest } = useOwnChannel(channel!);
+  const { confirmChannelRequestForUser } = useUserManagement();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirmClick = async () => {
     setIsLoading(true);
     await confirmChannelPermissionRequest(user!);
+    await confirmChannelRequestForUser(user!, channel!);
 
     setIsModalOpen(false);
     setIsLoading(false);

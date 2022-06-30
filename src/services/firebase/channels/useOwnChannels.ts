@@ -15,23 +15,25 @@ import { STORE_COLLECTIONS } from '../../../shared/Constants';
 import { genericConverter } from '../../../shared/Converters';
 import { ChannelEntity, UserProfile } from '../../../shared/Types';
 import { authUserToProfile } from '../../../shared/Utils';
+import useUserManagement from '../users/useUserManagement';
 
-export const useOwnChannel = (channelId: string) => {
+export const useOwnChannel = (channel: ChannelEntity) => {
+  const { id: channelId } = channel;
   const { store } = useFirebase();
 
-  const channelRef = collection(store!, STORE_COLLECTIONS.CHANNELS.ROOT).withConverter(
+  const channelsRef = collection(store!, STORE_COLLECTIONS.CHANNELS.ROOT).withConverter(
     genericConverter
   );
 
   const admissionRequestsRef = collection(
-    channelRef,
-    channelId,
+    channelsRef,
+    channelId!,
     STORE_COLLECTIONS.CHANNELS.ADMISSION_REQUESTS
   );
 
-  const membersRef = collection(channelRef, channelId, STORE_COLLECTIONS.CHANNELS.MEMBERS);
+  const membersRef = collection(channelsRef, channelId!, STORE_COLLECTIONS.CHANNELS.MEMBERS);
 
-  const bannedUsersRef = collection(channelRef, channelId, STORE_COLLECTIONS.CHANNELS.BANS);
+  const bannedUsersRef = collection(channelsRef, channelId!, STORE_COLLECTIONS.CHANNELS.BANS);
 
   const [admissionRequests] = useCollectionData(admissionRequestsRef);
   const [members] = useCollectionData(membersRef);
@@ -48,7 +50,7 @@ export const useOwnChannel = (channelId: string) => {
       doc(
         store!,
         STORE_COLLECTIONS.CHANNELS.ROOT,
-        channelId,
+        channelId!,
         STORE_COLLECTIONS.CHANNELS.MEMBERS,
         newUser.uid
       ),
@@ -59,7 +61,7 @@ export const useOwnChannel = (channelId: string) => {
       doc(
         store!,
         STORE_COLLECTIONS.CHANNELS.ROOT,
-        channelId,
+        channelId!,
         STORE_COLLECTIONS.CHANNELS.ADMISSION_REQUESTS,
         newUser.uid
       )
@@ -70,7 +72,7 @@ export const useOwnChannel = (channelId: string) => {
     const userRef = doc(
       store!,
       STORE_COLLECTIONS.CHANNELS.ROOT,
-      channelId,
+      channelId!,
       STORE_COLLECTIONS.CHANNELS.MEMBERS,
       bannedUser.uid!
     );
@@ -79,7 +81,7 @@ export const useOwnChannel = (channelId: string) => {
       doc(
         store!,
         STORE_COLLECTIONS.CHANNELS.ROOT,
-        channelId,
+        channelId!,
         STORE_COLLECTIONS.CHANNELS.BANS,
         bannedUser.uid!
       ),
@@ -92,7 +94,7 @@ export const useOwnChannel = (channelId: string) => {
     const bannedRef = doc(
       store!,
       STORE_COLLECTIONS.CHANNELS.ROOT,
-      channelId,
+      channelId!,
       STORE_COLLECTIONS.CHANNELS.BANS,
       bannedUser.uid!
     );
@@ -101,7 +103,7 @@ export const useOwnChannel = (channelId: string) => {
       doc(
         store!,
         STORE_COLLECTIONS.CHANNELS.ROOT,
-        channelId,
+        channelId!,
         STORE_COLLECTIONS.CHANNELS.MEMBERS,
         bannedUser.uid
       ),
@@ -115,7 +117,7 @@ export const useOwnChannel = (channelId: string) => {
     const userRef = doc(
       store!,
       STORE_COLLECTIONS.CHANNELS.ROOT,
-      channelId,
+      channelId!,
       STORE_COLLECTIONS.CHANNELS.MEMBERS,
       userId
     );
@@ -144,25 +146,45 @@ export default function useOwnChannels() {
   const q = query<ChannelEntity>(channelsRef, where('admin.uid', '==', user?.uid));
   const [channels] = useCollectionData<ChannelEntity>(q);
 
-  const createChannel = (data: Omit<ChannelEntity, 'admin'>) => {
-    addDoc<ChannelEntity>(channelsRef, { ...data, admin: authUserToProfile(user!) });
+  const createChannel = async (data: Omit<ChannelEntity, 'admin'>) => {
+    await addDoc<ChannelEntity>(channelsRef, { ...data, admin: authUserToProfile(user!) });
   };
 
-  const confirmDenyChannelPermissionRequest = async (newUser: UserProfile, channelId: string) => {
-    const channelSnapshot = doc(store!, STORE_COLLECTIONS.CHANNELS.ROOT, channelId);
-    const channelRef = await getDoc(channelSnapshot);
-    const channelEntity = channelRef.data() as ChannelEntity;
-    // await updateDoc(channelSnapshot, {
-    //   admissionRequests: channelEntity.admissionRequests.filter(
-    //     request => request.uid !== newUser?.uid
-    //   ),
-    // });
+  const removeChannelPermissionRequest = async (newUser: UserProfile, channelId: string) => {
+    const memberRequestRef = doc(
+      store!,
+      STORE_COLLECTIONS.CHANNELS.ROOT,
+      channelId,
+      STORE_COLLECTIONS.CHANNELS.ADMISSION_REQUESTS,
+      newUser.uid!
+    );
+    await deleteDoc(memberRequestRef);
+  };
+
+  const confirmChannelPermissionRequest = async (newUser: UserProfile, channelId: string) => {
+    const memberRequestRef = doc(
+      store!,
+      STORE_COLLECTIONS.CHANNELS.ROOT,
+      channelId,
+      STORE_COLLECTIONS.CHANNELS.ADMISSION_REQUESTS,
+      newUser.uid!
+    );
+    await deleteDoc(memberRequestRef);
+
+    const newMemberRef = doc(
+      store!,
+      STORE_COLLECTIONS.CHANNELS.ROOT,
+      channelId,
+      STORE_COLLECTIONS.CHANNELS.MEMBERS,
+      newUser.uid!
+    );
+    await setDoc(newMemberRef, newUser);
   };
 
   return {
     channels,
     createChannel,
-
-    confirmDenyChannelPermissionRequest,
+    removeChannelPermissionRequest,
+    confirmChannelPermissionRequest,
   };
 }

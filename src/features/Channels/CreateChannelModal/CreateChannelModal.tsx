@@ -2,19 +2,22 @@ import { Button, Chip, Chips, Group, Input, Modal, Tooltip } from '@mantine/core
 import { useInputState } from '@mantine/hooks';
 import { useState } from 'react';
 import { AlertCircle } from 'tabler-icons-react';
+import useFirebase from '../../../providers/useFirebase';
 import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';
 import { ChannelPrivacy, ModalProps } from '../../../shared/Types';
 
 export default function CreateChannelModal(props: ModalProps) {
   const { isModalOpen, setIsModalOpen } = props;
 
+  const { user } = useFirebase();
+
   const [name, setName] = useInputState('');
   const [privacy, setPrivacy] = useState<ChannelPrivacy>('public');
 
   const { createChannel, channels: ownedChannels } = useOwnChannels();
 
-  const handleCreateChannel = () => {
-    createChannel({
+  const handleCreateChannel = async () => {
+    await createChannel({
       name,
       privacy,
     });

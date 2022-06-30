@@ -8,7 +8,16 @@ export type MessageEntity = {
 
 export type ChannelPrivacy = 'private' | 'public';
 
-export type UserProfile = { uid: string; photoURL: string; displayName: string; email: string };
+export type UserProfile = {
+  uid: string;
+  photoURL: string;
+  displayName: string;
+  email: string;
+  channels?: ChannelEntity[];
+  ownedChannels?: ChannelEntity[];
+  admissionRequests?: ChannelEntity[];
+  bans?: ChannelEntity[];
+};
 
 export type ChannelEntity = {
   id?: string;

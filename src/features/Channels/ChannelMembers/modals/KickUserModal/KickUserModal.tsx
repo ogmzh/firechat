@@ -10,7 +10,7 @@ export default function KickUserModal(
 ) {
   const { channel, user, setIsModalOpen } = props;
   const [isLoading, setIsLoading] = useState(false);
-  const { kickUserFromChannel } = useOwnChannel(channel.id!);
+  const { kickUserFromChannel } = useOwnChannel(channel!);
 
   const handleConfirmClick = async () => {
     setIsLoading(true);

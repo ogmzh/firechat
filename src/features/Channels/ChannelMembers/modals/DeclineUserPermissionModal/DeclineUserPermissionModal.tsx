@@ -1,9 +1,8 @@
 import { Text } from '@mantine/core';
-import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 import useOwnChannels from '../../../../../services/firebase/channels/useOwnChannels';
+import useUserManagement from '../../../../../services/firebase/users/useUserManagement';
 import { ModalProps } from '../../../../../shared/Types';
-import { selectedChannelAtom } from '../../../ChannelStack/ChannelStack';
 import { UserPermissionProps } from '../../ChannelMembers';
 import ChannelControlModal from '../ChannelControlModal';
 
@@ -12,21 +11,15 @@ export default function DeclineUserPermissionModal(
 ) {
   const { channel, user, setIsModalOpen } = props;
 
-  const { confirmDenyChannelPermissionRequest } = useOwnChannels();
+  const { removeChannelPermissionRequest } = useOwnChannels();
+  const { removeChannelRequestForUser } = useUserManagement();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const setSelectedChannel = useSetAtom(selectedChannelAtom);
-
   const handleConfirmClick = async () => {
     setIsLoading(true);
-    await confirmDenyChannelPermissionRequest(user!, channel.id!);
-
-    setSelectedChannel(previous => ({
-      ...previous!,
-      // members: previous!.members.filter(member => member.uid !== user?.uid),
-      // admissionRequests: previous!.admissionRequests.filter(request => request.uid !== user?.uid),
-    }));
+    await removeChannelPermissionRequest(user!, channel.id!);
+    await removeChannelRequestForUser(user!, channel!);
     setIsModalOpen(false);
     setIsLoading(false);
   };

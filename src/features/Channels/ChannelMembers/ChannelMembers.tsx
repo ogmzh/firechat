@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowBackUp, Ban, Checkbox, SquareRotatedOff, SquareX } from 'tabler-icons-react';
 import useFirebase from '../../../providers/useFirebase';
 import { useOwnChannel } from '../../../services/firebase/channels/useOwnChannels';
+import { useUser } from '../../../services/firebase/users/useUserManagement';
 import { ChannelEntity, UserProfile } from '../../../shared/Types';
 import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 
@@ -29,7 +30,7 @@ export default function ChannelMembers() {
   const mantineTheme = useMantineTheme();
   const { user } = useFirebase();
 
-  const { admissionRequests, members, bannedUsers } = useOwnChannel(selectedChannel?.id!);
+  const { admissionRequests, members, bannedUsers } = useOwnChannel(selectedChannel!);
 
   return (
     <Stack>

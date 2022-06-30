@@ -8,7 +8,7 @@ import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 export default function ChannelOptions() {
   const [selectedChannel, setSelectedChannel] = useAtom(selectedChannelAtom);
   const { user } = useFirebase();
-  const { kickUserFromChannel } = useOwnChannel(selectedChannel?.id!);
+  const { kickUserFromChannel } = useOwnChannel(selectedChannel!);
 
   const handleLeaveChannel = async () => {
     setSelectedChannel(null);
