@@ -48,15 +48,6 @@ export default function useMessages(channelId: string, chatType: ChatType) {
       message
     );
   };
-  //   const channelSnapshot = doc<ChannelEntity>(channelRef, channelId);
-
-  //   const channelDocumentRef = await getDoc(channelSnapshot);
-  //   const channelEntity = channelDocumentRef.data();
-  //   await updateDoc(channelSnapshot, {
-  //     ...channelEntity,
-  //     messages: [...channelEntity?.messages!, message],
-  //   });
-  // };
 
   return { messages, sendMessage };
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   AppShell,
@@ -72,6 +72,7 @@ export default function Shell() {
       <AppShell
         styles={{
           main: {
+            overflow: 'hidden',
             background: theme.colors.dark[8],
           },
         }}

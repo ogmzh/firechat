@@ -1,4 +1,13 @@
-import { Avatar, Button, Group, SegmentedControl, Stack, Text, TextInput } from '@mantine/core';
+import {
+  Avatar,
+  Button,
+  Group,
+  ScrollArea,
+  SegmentedControl,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { getHotkeyHandler, useInputState } from '@mantine/hooks';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import useFirebase from '../../providers/useFirebase';
@@ -26,7 +35,7 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
     <Stack style={{ height: '100%', justifyContent: 'space-between' }}>
       <Group>
         <SegmentedControl
-          style={{ flex: 1 }}
+          style={{ flex: 1, position: 'sticky' }}
           color="orange"
           size="lg"
           value={selectedTab}
@@ -39,30 +48,33 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
           ]}
         />
       </Group>
+      <ScrollArea style={{ height: '80vh' }}>
+        <Stack>
+          {messages?.map(message => (
+            <Group
+              key={message.id}
+              align="flex-end"
+              style={{
+                flexDirection: `${message.author?.uid === user?.uid ? 'row-reverse' : 'row'}`,
+              }}>
+              <Avatar src={message.author?.photoURL ?? ''} radius="xl" />
+              <Text
+                sx={theme => ({
+                  flex: 0.75,
+                  padding: theme.spacing.xl,
+                  borderRadius: theme.spacing.sm,
+                  backgroundColor:
+                    message.author?.uid === user?.uid ? theme.colors.dark[6] : theme.colors.dark[7],
+                })}>
+                {message.text}
+              </Text>
+            </Group>
+          ))}
+        </Stack>
+        <div ref={scrollToRef} />
+      </ScrollArea>
       <Stack>
-        {messages?.map(message => (
-          <Group
-            key={message.id}
-            align="flex-end"
-            style={{
-              flexDirection: `${message.author?.uid === user?.uid ? 'row-reverse' : 'row'}`,
-            }}>
-            <Avatar src={message.author?.photoURL ?? ''} radius="xl" />
-            <Text
-              sx={theme => ({
-                flex: 0.75,
-                padding: theme.spacing.xl,
-                borderRadius: theme.spacing.sm,
-                backgroundColor:
-                  message.author?.uid === user?.uid ? theme.colors.dark[6] : theme.colors.dark[7],
-              })}>
-              {message.text}
-            </Text>
-          </Group>
-        ))}
-      </Stack>
-      <Stack>
-        <Group style={{ marginBottom: '-10px' }}>
+        <Group>
           <TextInput
             style={{ flex: 1 }}
             value={messageInput}
@@ -71,7 +83,6 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
           />
           <Button onClick={() => handleSendMessage()}>Send</Button>
         </Group>
-        <div ref={scrollToRef} />
       </Stack>
     </Stack>
   );
