@@ -43,7 +43,7 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
           data={[
             { label: 'Public', value: 'public' },
             { label: 'Announcements', value: 'announcements' },
-            { label: 'Private', value: 'private' },
+            { label: 'Anonymous', value: 'anonymous' },
             { label: '1 on 1', value: '1-on-1' },
           ]}
         />
@@ -73,7 +73,8 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
         </Stack>
         <div ref={scrollToRef} />
       </ScrollArea>
-      <Stack>
+
+      <Stack hidden={selectedTab === 'announcements' && selectedChannel.admin.uid !== user?.uid}>
         <Group>
           <TextInput
             style={{ flex: 1 }}

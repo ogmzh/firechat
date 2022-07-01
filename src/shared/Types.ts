@@ -32,4 +32,4 @@ export type ModalProps = {
   setIsModalOpen: (value: boolean) => void;
 };
 
-export type ChatType = 'public' | 'private' | '1-on-1' | 'announcements';
+export type ChatType = 'public' | 'anonymous' | '1-on-1' | 'announcements';
