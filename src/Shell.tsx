@@ -72,7 +72,6 @@ export default function Shell() {
       <AppShell
         styles={{
           main: {
-            overflow: 'hidden',
             background: theme.colors.dark[8],
           },
         }}

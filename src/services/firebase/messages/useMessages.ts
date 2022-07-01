@@ -29,7 +29,7 @@ export default function useMessages(channelId: string, chatType: ChatType) {
       channelId,
     };
 
-    if (chatType !== '1-on-1') {
+    if (chatType !== 'anonymous') {
       message.author = authUserToProfile(user!);
       if (recipient) {
         message.recipient = recipient;
