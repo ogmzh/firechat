@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, orderBy, query, setDoc } from 'firebase/firestore';
+import { addDoc, collection, orderBy, query } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import useFirebase from '../../../providers/useFirebase';
 import { STORE_COLLECTIONS } from '../../../shared/Constants';
@@ -49,5 +49,5 @@ export default function useMessages(channelId: string, chatType: ChatType) {
     );
   };
 
-  return { messages, sendMessage };
+  return { messages: messages as MessageEntity[], sendMessage };
 }

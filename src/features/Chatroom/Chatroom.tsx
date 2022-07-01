@@ -60,7 +60,7 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
               <Avatar src={message.author?.photoURL ?? ''} radius="xl" />
               <Text
                 sx={theme => ({
-                  flex: 0.75,
+                  flex: selectedTab === 'announcements' || selectedTab === 'anonymous' ? 1 : 0.75,
                   padding: theme.spacing.xl,
                   borderRadius: theme.spacing.sm,
                   backgroundColor:

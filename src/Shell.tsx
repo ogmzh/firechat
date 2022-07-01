@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import {
   AppShell,
@@ -17,13 +17,13 @@ import { ToastContainer } from 'react-toastify';
 import { Search, SquarePlus } from 'tabler-icons-react';
 import SignIn from './components/SignIn/SignIn';
 import SignOutUserAccordionItem from './components/SignOutAccordionItem/SignOutAccordionItem';
+import ChannelMembers from './features/Channels/ChannelMembers/ChannelMembers';
+import ChannelOptions from './features/Channels/ChannelOptions/ChannelOptions';
 import ChannelStack, { selectedChannelAtom } from './features/Channels/ChannelStack/ChannelStack';
 import CreateChannelModal from './features/Channels/CreateChannelModal/CreateChannelModal';
 import SearchChannelsModal from './features/Channels/SearchChannelsModal/SearchChannelsModal';
-import useFirebase from './providers/useFirebase';
-import ChannelOptions from './features/Channels/ChannelOptions/ChannelOptions';
 import Chatroom from './features/Chatroom/Chatroom';
-import ChannelMembers from './features/Channels/ChannelMembers/ChannelMembers';
+import useFirebase from './providers/useFirebase';
 
 import 'react-toastify/dist/ReactToastify.css';
 
