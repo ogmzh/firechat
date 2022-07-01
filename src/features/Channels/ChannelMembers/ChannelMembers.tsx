@@ -1,11 +1,11 @@
 import { Stack, Text, useMantineTheme } from '@mantine/core';
-import { useAtomValue } from 'jotai';
+import { atom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { ArrowBackUp, Ban, Checkbox, SquareRotatedOff, SquareX } from 'tabler-icons-react';
 import useFirebase from '../../../providers/useFirebase';
 import { useOwnChannel } from '../../../services/firebase/channels/useOwnChannels';
-import { ChannelEntity, UserProfile } from '../../../shared/Types';
-import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
+import { ChannelEntity, ChatType, UserProfile } from '../../../shared/Types';
+import { selectedChannelAtom, selectedUserAtom } from '../ChannelStack/ChannelStack';
 
 import ChannelMember from './ChannelMember/ChannelMember';
 import BanUserModal from './modals/BanUserModal/BanUserModal';
@@ -19,6 +19,8 @@ export type UserPermissionProps = {
   channel: ChannelEntity;
 };
 
+export const selectedTabAtom = atom<ChatType>('public');
+
 export default function ChannelMembers() {
   const [confirmUser, setConfirmUser] = useState<UserProfile | null>(null);
   const [declineUser, setDeclineUser] = useState<UserProfile | null>(null);
@@ -26,6 +28,7 @@ export default function ChannelMembers() {
   const [banUser, setBanUser] = useState<UserProfile | null>(null);
   const [unbanUser, setUnbanUser] = useState<UserProfile | null>(null);
   const selectedChannel = useAtomValue(selectedChannelAtom);
+  const selectedTab = useAtomValue(selectedTabAtom);
   const mantineTheme = useMantineTheme();
   const { user } = useFirebase();
 
@@ -74,13 +77,13 @@ export default function ChannelMembers() {
       )}
       <Text hidden={!members || members.length === 0}>Channel members</Text>
       {selectedChannel?.admin.uid !== user?.uid && (
-        <ChannelMember user={selectedChannel!.admin}>
+        <ChannelMember user={selectedChannel!.admin} canSelectUser={selectedTab === '1-on-1'}>
           <Text weight={200}>Admin</Text>
         </ChannelMember>
       )}
       {members?.map(member => (
         <div key={member.uid}>
-          <ChannelMember user={member}>
+          <ChannelMember user={member} canSelectUser={selectedTab === '1-on-1'}>
             {selectedChannel && selectedChannel.admin.uid === user?.uid && (
               <>
                 <BanUserModal

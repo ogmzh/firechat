@@ -1,12 +1,13 @@
 import { Divider, Stack, StackProps, Text } from '@mantine/core';
-import { atom } from 'jotai';
+import { atom, useAtomValue } from 'jotai';
 import ChannelLink from '../../../components/ChannelLink/ChannelLink';
 import useFirebase from '../../../providers/useFirebase';
 import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';
 import { useUser } from '../../../services/firebase/users/useUserManagement';
-import { ChannelEntity } from '../../../shared/Types';
+import { ChannelEntity, UserProfile } from '../../../shared/Types';
 
 export const selectedChannelAtom = atom<ChannelEntity | null>(null);
+export const selectedUserAtom = atom<UserProfile | null>(null);
 
 export default function ChannelStack(props: StackProps) {
   const { channels: ownedChannels } = useOwnChannels();

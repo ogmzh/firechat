@@ -9,22 +9,27 @@ import {
   TextInput,
 } from '@mantine/core';
 import { getHotkeyHandler, useInputState } from '@mantine/hooks';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import useFirebase from '../../providers/useFirebase';
 import useMessages from '../../services/firebase/messages/useMessages';
 import { ChannelEntity, ChatType } from '../../shared/Types';
+import { selectedTabAtom } from '../Channels/ChannelMembers/ChannelMembers';
+import { selectedUserAtom } from '../Channels/ChannelStack/ChannelStack';
 
 export default function Chatroom({ selectedChannel }: { selectedChannel: ChannelEntity }) {
   const [messageInput, setMessageInput] = useInputState('');
 
-  const [selectedTab, setSelectedTab] = useState<ChatType>('public');
+  const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
+  const selectedUser = useAtomValue(selectedUserAtom);
   const scrollToRef = useRef<HTMLDivElement>(null);
 
   const { messages, sendMessage } = useMessages(selectedChannel.id!, selectedTab);
   const { user } = useFirebase();
+
   const handleSendMessage = async () => {
-    await sendMessage(messageInput);
     setMessageInput('');
+    await sendMessage(messageInput);
   };
 
   useEffect(() => {
@@ -74,7 +79,11 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
         <div ref={scrollToRef} />
       </ScrollArea>
 
-      <Stack hidden={selectedTab === 'announcements' && selectedChannel.admin.uid !== user?.uid}>
+      <Stack
+        hidden={
+          (selectedTab === 'announcements' && selectedChannel.admin.uid !== user?.uid) ||
+          (selectedTab === '1-on-1' && !selectedUser)
+        }>
         <Group>
           <TextInput
             style={{ flex: 1 }}
