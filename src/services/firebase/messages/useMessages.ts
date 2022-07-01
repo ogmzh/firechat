@@ -1,4 +1,4 @@
-import { addDoc, collection, orderBy, query } from 'firebase/firestore';
+import { addDoc, collection, orderBy, query, where } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import useFirebase from '../../../providers/useFirebase';
 import { STORE_COLLECTIONS } from '../../../shared/Constants';
@@ -6,7 +6,11 @@ import { genericConverter } from '../../../shared/Converters';
 import { ChatType, MessageEntity, UserProfile } from '../../../shared/Types';
 import { authUserToProfile } from '../../../shared/Utils';
 
-export default function useMessages(channelId: string, chatType: ChatType) {
+export default function useMessages(
+  channelId: string,
+  chatType: ChatType,
+  recipient: UserProfile | null
+) {
   const { store, user } = useFirebase();
 
   const channelRef = collection(
@@ -18,11 +22,14 @@ export default function useMessages(channelId: string, chatType: ChatType) {
     STORE_COLLECTIONS.CHANNELS.MESSAGES
   ).withConverter(genericConverter);
 
-  const q = query(channelRef, orderBy('createdAt'));
+  const q =
+    chatType === '1-on-1' && recipient
+      ? query(channelRef, where('recipient.uid', '==', recipient.uid), orderBy('createdAt'))
+      : query(channelRef, orderBy('createdAt'));
 
   const [messages] = useCollectionData(q);
 
-  const sendMessage = async (value: string, recipient?: UserProfile) => {
+  const sendMessage = async (value: string) => {
     let message: MessageEntity = {
       text: value,
       createdAt: new Date(),

@@ -5,7 +5,7 @@ import { ArrowBackUp, Ban, Checkbox, SquareRotatedOff, SquareX } from 'tabler-ic
 import useFirebase from '../../../providers/useFirebase';
 import { useOwnChannel } from '../../../services/firebase/channels/useOwnChannels';
 import { ChannelEntity, ChatType, UserProfile } from '../../../shared/Types';
-import { selectedChannelAtom, selectedUserAtom } from '../ChannelStack/ChannelStack';
+import { selectedChannelAtom } from '../ChannelStack/ChannelStack';
 
 import ChannelMember from './ChannelMember/ChannelMember';
 import BanUserModal from './modals/BanUserModal/BanUserModal';
@@ -54,7 +54,7 @@ export default function ChannelMembers() {
           </Text>
           {admissionRequests?.map(user => (
             <div key={user.uid}>
-              <ChannelMember user={user}>
+              <ChannelMember user={user} canSelectUser={false}>
                 <div>
                   <Checkbox
                     size={28}
@@ -81,36 +81,43 @@ export default function ChannelMembers() {
           <Text weight={200}>Admin</Text>
         </ChannelMember>
       )}
-      {members?.map(member => (
-        <div key={member.uid}>
-          <ChannelMember user={member} canSelectUser={selectedTab === '1-on-1'}>
-            {selectedChannel && selectedChannel.admin.uid === user?.uid && (
-              <>
-                <BanUserModal
-                  channel={selectedChannel}
-                  setIsModalOpen={() => setBanUser(null)}
-                  user={banUser}
-                />
-                <KickUserModal
-                  channel={selectedChannel}
-                  setIsModalOpen={() => setKickUser(null)}
-                  user={kickUser}
-                />
-                <div>
-                  <SquareRotatedOff
-                    style={{ marginRight: mantineTheme.spacing.xs }}
-                    size={28}
-                    color="orange"
-                    cursor="pointer"
-                    onClick={() => setKickUser(member)}
+      {members
+        ?.filter(member => member.uid !== user?.uid)
+        .map(member => (
+          <div key={member.uid}>
+            <ChannelMember user={member} canSelectUser={selectedTab === '1-on-1'}>
+              {selectedChannel && selectedChannel.admin.uid === user?.uid && (
+                <>
+                  <BanUserModal
+                    channel={selectedChannel}
+                    setIsModalOpen={() => setBanUser(null)}
+                    user={banUser}
                   />
-                  <Ban size={28} color="red" cursor="pointer" onClick={() => setBanUser(member)} />
-                </div>
-              </>
-            )}
-          </ChannelMember>
-        </div>
-      ))}
+                  <KickUserModal
+                    channel={selectedChannel}
+                    setIsModalOpen={() => setKickUser(null)}
+                    user={kickUser}
+                  />
+                  <div>
+                    <SquareRotatedOff
+                      style={{ marginRight: mantineTheme.spacing.xs }}
+                      size={28}
+                      color="orange"
+                      cursor="pointer"
+                      onClick={() => setKickUser(member)}
+                    />
+                    <Ban
+                      size={28}
+                      color="red"
+                      cursor="pointer"
+                      onClick={() => setBanUser(member)}
+                    />
+                  </div>
+                </>
+              )}
+            </ChannelMember>
+          </div>
+        ))}
       {selectedChannel &&
         user?.uid === selectedChannel?.admin.uid &&
         bannedUsers &&

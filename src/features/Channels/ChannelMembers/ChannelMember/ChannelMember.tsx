@@ -24,8 +24,9 @@ export default function ChannelMember({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: theme.spacing.xs,
-        border: selectedUser?.uid === user.uid ? '1px solid orange' : '0',
-        backgroundColor: selectedUser?.uid === user.uid ? theme.colors.dark[4] : 'inherit',
+        border: selectedUser?.uid === user.uid && canSelectUser ? '1px solid orange' : '0',
+        backgroundColor:
+          selectedUser?.uid === user.uid && canSelectUser ? theme.colors.dark[4] : 'inherit',
         borderRadius: theme.radius.sm,
         '&:hover': {
           backgroundColor: theme.colors.dark[5],

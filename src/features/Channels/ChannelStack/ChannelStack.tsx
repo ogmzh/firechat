@@ -1,5 +1,5 @@
 import { Divider, Stack, StackProps, Text } from '@mantine/core';
-import { atom, useAtomValue } from 'jotai';
+import { atom } from 'jotai';
 import ChannelLink from '../../../components/ChannelLink/ChannelLink';
 import useFirebase from '../../../providers/useFirebase';
 import useOwnChannels from '../../../services/firebase/channels/useOwnChannels';

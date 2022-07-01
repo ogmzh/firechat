@@ -24,7 +24,7 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
   const selectedUser = useAtomValue(selectedUserAtom);
   const scrollToRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage } = useMessages(selectedChannel.id!, selectedTab);
+  const { messages, sendMessage } = useMessages(selectedChannel.id!, selectedTab, selectedUser);
   const { user } = useFirebase();
 
   const handleSendMessage = async () => {
