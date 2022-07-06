@@ -49,7 +49,7 @@ export default function Shell() {
         <Box style={{ width: 400 }}>
           <Box style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <Text weight={700} size="xl" mb="20px">
-              Firechat
+              Firechat!
             </Text>
             <SignIn />
           </Box>
@@ -91,7 +91,7 @@ export default function Shell() {
                 />
               </MediaQuery>
               <Text weight="bold" size="xl" color="orange">
-                Firechat
+                Firechat!
               </Text>
             </div>
           </Header>
