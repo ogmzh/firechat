@@ -19,6 +19,7 @@
     "date-fns": "^2.28.0",
     "dayjs": "^1.11.3",
     "firebase": "^9.8.3",
+    "firestore-pagination-hook": "^1.0.0",
     "jotai": "^1.7.2",
     "lodash-es": "^4.17.21",
     "query-string": "^7.1.1",

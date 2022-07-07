@@ -5,6 +5,7 @@ import { STORE_COLLECTIONS } from '../../../shared/Constants';
 import { genericConverter } from '../../../shared/Converters';
 import { ChatType, MessageEntity, UserProfile } from '../../../shared/Types';
 import { authUserToProfile } from '../../../shared/Utils';
+import usePagination from 'firestore-pagination-hook';
 
 export default function useMessages(
   channelId: string,
@@ -29,7 +30,19 @@ export default function useMessages(
         : query(channelRef, where('1', '==', 2)) // disable the query from fetching all "1-on-1" messages
       : query(channelRef, orderBy('createdAt'));
 
-  const [messages] = useCollectionData(q);
+  const {
+    loading: loadingMessages,
+    loadingError: loadingMessagesError,
+    loadingMore: loadingMoreMessages,
+    loadingMoreError: loadingMoreMessagesError,
+    hasMore: hasMoreMessages,
+    items: messages,
+    loadMore: loadMoreMessages,
+  } = usePagination(q, {
+    limit: 25,
+  });
+
+  // const [messages] = useCollectionData(q);
 
   const sendMessage = async (value: string) => {
     let message: MessageEntity = {
@@ -58,5 +71,12 @@ export default function useMessages(
     );
   };
 
-  return { messages: messages as MessageEntity[], sendMessage };
+  return {
+    messages: messages as MessageEntity[],
+    sendMessage,
+    loadingMessages,
+    hasMoreMessages,
+    loadingMoreMessages,
+    loadMoreMessages,
+  };
 }
