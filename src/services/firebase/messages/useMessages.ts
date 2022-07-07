@@ -23,8 +23,10 @@ export default function useMessages(
   ).withConverter(genericConverter);
 
   const q =
-    chatType === '1-on-1' && recipient
-      ? query(channelRef, where('recipient.uid', '==', recipient.uid), orderBy('createdAt'))
+    chatType === '1-on-1'
+      ? recipient
+        ? query(channelRef, where('recipient.uid', '==', recipient.uid), orderBy('createdAt'))
+        : query(channelRef, where('1', '==', 2)) // disable the query from fetching all "1-on-1" messages
       : query(channelRef, orderBy('createdAt'));
 
   const [messages] = useCollectionData(q);
