@@ -1,10 +1,12 @@
+import { Timestamp } from 'firebase/firestore';
+
 export type MessageEntity = {
   id?: string;
   text: string;
   recipient?: UserProfile;
   author?: UserProfile;
   channelId: string;
-  createdAt?: Date | string;
+  createdAt?: Timestamp;
 };
 
 export type ChannelPrivacy = 'private' | 'public';

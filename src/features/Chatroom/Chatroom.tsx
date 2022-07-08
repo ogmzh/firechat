@@ -8,11 +8,13 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { getHotkeyHandler, useInputState } from '@mantine/hooks';
+import { getHotkeyHandler, useInputState, useIntersection } from '@mantine/hooks';
 import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import useFirebase from '../../providers/useFirebase';
-import useMessages from '../../services/firebase/messages/useMessages';
+import usePaginatedMessages, {
+  DEFAULT_PAGE_SIZE,
+} from '../../services/firebase/messages/useMessages';
 import { ChannelEntity, ChatType } from '../../shared/Types';
 import { selectedTabAtom } from '../Channels/ChannelMembers/ChannelMembers';
 import { selectedUserAtom } from '../Channels/ChannelStack/ChannelStack';
@@ -23,18 +25,38 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
   const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
   const selectedUser = useAtomValue(selectedUserAtom);
   const scrollToRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage } = useMessages(selectedChannel.id!, selectedTab, selectedUser);
+  const { sendMessage, messages, loadMore, hasMore, isLoading } = usePaginatedMessages(
+    selectedChannel.id!,
+    selectedTab,
+    selectedUser
+  );
+
+  const [loadMoreRef, observedEntry] = useIntersection({
+    root: containerRef.current,
+    threshold: 1,
+  });
+
+  useEffect(() => {
+    if (observedEntry?.isIntersecting && hasMore && !isLoading) {
+      loadMore();
+    }
+  }, [observedEntry?.isIntersecting, hasMore, isLoading]);
+
   const { user } = useFirebase();
+
+  useEffect(() => {
+    if (messages.length <= DEFAULT_PAGE_SIZE) {
+      scrollToRef.current?.scrollIntoView(); // initially scroll to last
+    }
+  }, [messages]);
 
   const handleSendMessage = async () => {
     setMessageInput('');
     await sendMessage(messageInput);
+    scrollToRef.current?.scrollIntoView({ behavior: 'smooth' }); // initially scroll to last
   };
-
-  useEffect(() => {
-    scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
 
   return (
     <Stack style={{ height: '100%', justifyContent: 'space-between' }}>
@@ -53,31 +75,46 @@ export default function Chatroom({ selectedChannel }: { selectedChannel: Channel
           ]}
         />
       </Group>
-      <ScrollArea style={{ height: '80vh' }}>
-        <Stack>
-          {messages?.map(message => (
-            <Group
-              key={message.id}
-              align="flex-end"
-              style={{
-                flexDirection: `${message.author?.uid === user?.uid ? 'row-reverse' : 'row'}`,
-              }}>
-              <Avatar src={message.author?.photoURL ?? ''} radius="xl" />
-              <Text
-                sx={theme => ({
-                  flex: selectedTab === 'announcements' || selectedTab === 'anonymous' ? 1 : 0.75,
-                  padding: theme.spacing.xl,
-                  borderRadius: theme.spacing.sm,
-                  backgroundColor:
-                    message.author?.uid === user?.uid ? theme.colors.dark[6] : theme.colors.dark[7],
-                })}>
-                {message.text}
-              </Text>
-            </Group>
-          ))}
-        </Stack>
-        <div ref={scrollToRef} />
-      </ScrollArea>
+      <Stack
+        style={{
+          display: 'flex',
+          flexDirection: 'column-reverse',
+          justifyItems: 'flex-start',
+          height: '100%',
+        }}>
+        <ScrollArea offsetScrollbars style={{ height: '75vh' }} ref={containerRef}>
+          <Stack
+            style={{
+              display: 'flex',
+              flexDirection: 'column-reverse',
+            }}>
+            {messages.map((message, index) => (
+              <Group
+                key={message.id}
+                align="flex-end"
+                style={{
+                  flexDirection: `${message.author?.uid === user?.uid ? 'row-reverse' : 'row'}`,
+                }}>
+                <Avatar src={message.author?.photoURL ?? ''} radius="xl" />
+                <Text
+                  ref={index % 10 === 0 ? loadMoreRef : undefined}
+                  sx={theme => ({
+                    flex: selectedTab === 'announcements' || selectedTab === 'anonymous' ? 1 : 0.75,
+                    padding: theme.spacing.xl,
+                    borderRadius: theme.spacing.sm,
+                    backgroundColor:
+                      message.author?.uid === user?.uid
+                        ? theme.colors.dark[6]
+                        : theme.colors.dark[7],
+                  })}>
+                  {message.text}
+                </Text>
+              </Group>
+            ))}
+          </Stack>
+          <div ref={scrollToRef} />
+        </ScrollArea>
+      </Stack>
 
       <Stack
         hidden={
