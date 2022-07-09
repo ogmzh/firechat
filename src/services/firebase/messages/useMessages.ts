@@ -52,7 +52,10 @@ export default function usePaginatedMessages(
         ? recipient
           ? query(
               channelRef,
-              where('recipient.uid', '==', recipient.uid),
+              where('participants', 'in', [
+                [recipient.uid, user?.uid!],
+                [user?.uid!, recipient.uid],
+              ]),
               orderBy('createdAt', 'desc'),
               limit(DEFAULT_PAGE_SIZE)
             )
@@ -97,6 +100,7 @@ export default function usePaginatedMessages(
       message.author = authUserToProfile(user!);
       if (recipient) {
         message.recipient = recipient;
+        message.participants = [recipient.uid, user?.uid!];
       }
     }
 

@@ -7,6 +7,7 @@ export type MessageEntity = {
   author?: UserProfile;
   channelId: string;
   createdAt?: Timestamp;
+  participants?: [string, string];
 };
 
 export type ChannelPrivacy = 'private' | 'public';
